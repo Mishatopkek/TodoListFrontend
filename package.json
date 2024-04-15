@@ -16,7 +16,9 @@
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@react-buddy/ide-toolbox": "^2.4.0",
+    "@react-buddy/palette-mui": "^5.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
