@@ -1,11 +1,6 @@
 ﻿import {Fragment} from "react"
-import {
-    Category,
-    Component,
-    Variant,
-    Palette,
-} from "@react-buddy/ide-toolbox"
-import MUIPalette from "@react-buddy/palette-mui";
+import {Category, Component, Palette, Variant,} from "@react-buddy/ide-toolbox"
+import JiraCard from "../components/UI/JiraCard.jsx";
 
 export const PaletteTree = () => (
     <Palette>
@@ -13,6 +8,11 @@ export const PaletteTree = () => (
             <Component name="Loader">
                 <Variant>
                     <ExampleLoaderComponent/>
+                </Variant>
+            </Component>
+            <Component name="JiraCard">
+                <Variant name="In app">
+                    <JiraCard/>
                 </Variant>
             </Component>
         </Category>
