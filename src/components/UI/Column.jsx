@@ -6,42 +6,52 @@ import {Draggable, Droppable} from "@hello-pangea/dnd";
 const Column = ({column, index}) => {
     return (
         <Draggable draggableId={column.id} index={index}>
-            {(draggableProvider, draggableSnapshot) => (
+            {(columnDraggableProvider, draggableSnapshot) => (
+                <Box
+                    ref={columnDraggableProvider.innerRef}
+                    {...columnDraggableProvider.draggableProps}
+                    {...columnDraggableProvider.dragHandleProps}
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        backgroundColor: 'black',
+                        marginLeft: '4px',
+                        marginRight: '4px',
+                        paddingLeft: '4px',
+                        paddingRight: '4px',
+                    }}
+                >
+                    <Typography variant="h6" component="h2">
+                        {column.title}
+                    </Typography>
                 <Droppable
                     droppableId={column.id}
                     type="CARD"
                 >
-                    {(droppableProvider, droppableSnapshot) => (
-                        <Box
-                            ref={draggableProvider.innerRef}
-                            {...draggableProvider.draggableProps}
-                            {...draggableProvider.dragHandleProps}
-                            sx={{
-                                display: 'flex',
-                                backgroundColor: 'black',
-                                marginLeft: '4px',
-                                marginRight: '4px',
-                                paddingLeft: '4px',
-                                paddingRight: '4px'
-                            }}
-                        >
+                    {(droppableCardProvider, droppableSnapshot) => (
                             <Box
-                                ref={droppableProvider.innerRef}
-                                {...droppableProvider.droppableProps}>
-                                <Typography variant="h6" component="h2">
-                                    {column.title}
-                                </Typography>
-                                <Box
-                                >
+                                ref={droppableCardProvider.innerRef}
+                                {...droppableCardProvider.droppableProps}
+                                sx={{
+                                    flexGrow: 1 // Allow the droppable area to grow
+                                }}
+                            >
+                                <Box>
+                                    <Box
+                                        sx={{
+                                            paddingLeft: '128px',
+                                            paddingRight: '128px',
+                                        }}
+                                    ></Box>
                                     {column.cards.map((card, index) => (
                                         <JiraCard key={card.id} card={card} index={index}/>
                                     ))}
-                                    {droppableProvider.placeholder}
+                                    {droppableCardProvider.placeholder}
                                 </Box>
                             </Box>
-                        </Box>
                     )}
                 </Droppable>
+                </Box>
             )}
         </Draggable>
     );
