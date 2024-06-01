@@ -1,4 +1,4 @@
-﻿import {Card, Typography} from "@mui/material";
+﻿import {Card, Tooltip, Typography} from "@mui/material";
 import {Draggable} from "@hello-pangea/dnd";
 import Box from "@mui/material/Box";
 
@@ -14,12 +14,20 @@ const JiraCard = ({card, index}) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}>
-            <Card sx={{
-                padding: '8px',
-            }}>
-                <Typography variant="body2" component="h2">
-                    {index} {card.title}
-                </Typography>
+            <Card sx={{padding: '8px', cursor: 'pointer'}}>
+                <Tooltip title={card.title} placement="bottom-start">
+                    <Typography
+                        variant="body2"
+                        component="h2"
+                        sx={{
+                            '&:hover': {
+                                textDecoration: 'underline',
+                            },
+                        }}
+                    >
+                        {card.title}
+                    </Typography>
+                </Tooltip>
                 <Typography variant="body2" color="text.secondary">
                     tag1, tag2
                 </Typography>
