@@ -93,6 +93,7 @@ const board = {
         {
             id: "4199ED16-4051-42B7-A7A4-6307F8B7B2CA",
             title: "TO DO",
+            showAddCardByDefault: true,
             cards: [
                 {
                     id: "C1C52A6F-429F-40FA-964A-B2932923210D",

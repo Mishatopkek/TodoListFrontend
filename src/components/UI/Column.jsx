@@ -1,13 +1,17 @@
-﻿import {Typography} from "@mui/material";
-import JiraCard from "./JiraCard.jsx";
+﻿import {Button, Typography} from "@mui/material";
+import Card from "./JiraCard.jsx";
 import Box from "@mui/material/Box";
 import {Draggable, Droppable} from "@hello-pangea/dnd";
+import {useState} from "react";
 
 const Column = ({column, index}) => {
+    const [onHover, setOnHover] = useState(false);
     return (
         <Draggable draggableId={column.id} index={index}>
             {(columnDraggableProvider, draggableSnapshot) => (
                 <Box
+                    onMouseEnter={() => setOnHover(true)}
+                    onMouseLeave={() => setOnHover(false)}
                     ref={columnDraggableProvider.innerRef}
                     {...columnDraggableProvider.draggableProps}
                     {...columnDraggableProvider.dragHandleProps}
@@ -29,31 +33,54 @@ const Column = ({column, index}) => {
                     type="CARD"
                 >
                     {(droppableCardProvider, droppableSnapshot) => (
+                        <Box
+                            ref={droppableCardProvider.innerRef}
+                            {...droppableCardProvider.droppableProps}
+                            sx={{
+                                flexGrow: 1 // Allow the droppable area to grow
+                            }}
+                        >
                             <Box
-                                ref={droppableCardProvider.innerRef}
-                                {...droppableCardProvider.droppableProps}
                                 sx={{
-                                    flexGrow: 1 // Allow the droppable area to grow
+                                    paddingLeft: '128px',
+                                    paddingRight: '128px',
                                 }}
-                            >
-                                <Box>
-                                    <Box
-                                        sx={{
-                                            paddingLeft: '128px',
-                                            paddingRight: '128px',
-                                        }}
-                                    ></Box>
-                                    {column.cards.map((card, index) => (
-                                        <JiraCard key={card.id} card={card} index={index}/>
-                                    ))}
-                                    {droppableCardProvider.placeholder}
-                                </Box>
-                            </Box>
+                            ></Box>
+                            {column.cards.map((card, index) => (
+                                <Card key={card.id} card={card} index={index}/>
+                            ))}
+                            {droppableCardProvider.placeholder}
+                            <CreateIssueButton shouldBeShown={onHover || column.showAddCardByDefault}/>
+                        </Box>
                     )}
                 </Droppable>
                 </Box>
             )}
         </Draggable>
+    );
+};
+const CreateIssueButton = ({shouldBeShown}) => {
+    return (
+        shouldBeShown ? (
+            <Button
+                variant="text"
+                sx={{
+                    display: 'block',
+                    textTransform: "none",
+                    width: '100%',
+                    textAlign: 'left'
+                }}
+            >
+                + Create issue
+            </Button>
+        ) : (
+            <div style={{
+                width: '100%',
+                height: '36px', // Set height to match the button's height
+                textAlign: 'left'
+            }}>
+            </div>
+        )
     );
 };
 export default Column;
