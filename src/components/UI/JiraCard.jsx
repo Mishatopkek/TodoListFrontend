@@ -9,7 +9,10 @@ const JiraCard = ({card, index}) => {
         index={index}>
         {(provided, snapshot) => (<Box
             sx={{
-                marginTop: '4px', marginDown: '4px', minWidth: 256, maxWidth: 256
+                marginTop: '4px',
+                marginDown: '4px',
+                minWidth: 256,
+                maxWidth: 256
             }}
             {...provided.draggableProps}
             {...provided.dragHandleProps}

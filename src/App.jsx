@@ -4,7 +4,8 @@ import MiniDrawer from "./components/UI/Drawer.jsx";
 import Box from "@mui/material/Box";
 import {DragDropContext, Droppable} from "@hello-pangea/dnd";
 import Column from "./components/UI/Column.jsx";
-import {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {columnActions} from "./store/columns.js";
 
 function App() {
     const darkTheme = createTheme({
@@ -12,7 +13,8 @@ function App() {
             mode: 'dark',
         },
     });
-    const [columns, setColumns] = useState(board.columns);
+    const dispatch = useDispatch();
+    const columns = useSelector(state => state.column);
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -38,25 +40,15 @@ function App() {
                         <Typography variant="h4" component="h1">{board.title}</Typography>
                     </Box>
                     <DragDropContext onDragEnd={dropResult => {
-                        setColumns(prevColumns => {
-                            if (dropResult.source === null || dropResult.destination === null) return prevColumns;
-                            const columns = [...prevColumns];
-                            if (dropResult.source.droppableId === dropResult.destination.droppableId && dropResult.source.droppableId === "board") { // Column reorder
-                                const element = columns.find(x => x.id === dropResult.draggableId);
-                                columns.splice(columns.indexOf(element), 1);
-                                columns.splice(dropResult.destination.index, 0, element);
-                            } else { // Card move
-                                //Remove card from source column
-                                const sourceColumn = columns.find(x => x.id === dropResult.source.droppableId);
-                                const card = sourceColumn.cards.find(x => x.id === dropResult.draggableId);
-                                sourceColumn.cards = sourceColumn.cards.filter(x => x.id !== dropResult.draggableId);
+                        if (dropResult.source === null || dropResult.destination === null) return columns;
 
-                                //Add card to destination column
-                                const destinationColumn = columns.find(x => x.id === dropResult.destination.droppableId);
-                                destinationColumn.cards.splice(dropResult.destination.index, 0, card);
-                            }
-                            return columns;
-                        })
+                        // Column reorder
+                        if (dropResult.source.droppableId === dropResult.destination.droppableId && dropResult.source.droppableId === "board") {
+                            dispatch(columnActions.updateColumnsInBoard(dropResult));
+                        } else {
+                            // Card move
+                            dispatch(columnActions.updateCardsInColumns(dropResult));
+                        }
                     }}>
                         <Droppable
                             droppableId="board"

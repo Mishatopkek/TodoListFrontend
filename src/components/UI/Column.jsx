@@ -1,15 +1,38 @@
-﻿import {Button, Paper, Typography} from "@mui/material";
+﻿import {Typography} from "@mui/material";
 import Card from "./JiraCard.jsx";
 import Box from "@mui/material/Box";
 import {Draggable, Droppable} from "@hello-pangea/dnd";
-import {useState} from "react";
-import InputBase from "@mui/material/InputBase";
+import {useCallback, useState} from "react";
+import OutsideClickHandler from "../wrappers/OutsideClickHandler.jsx";
+import {useDispatch} from "react-redux";
+import {columnActions} from "../../store/columns.js";
+import CreateIssueButton from "./Column/CreateIssueButton.jsx";
+import CreateCard from "./Column/CreateCard.jsx";
 
 const Column = ({column, index}) => {
     const [onHover, setOnHover] = useState(false);
-    const [currentColumn, setCurrentColumn] = useState(column);
+    const [showCreateCard, setShowCreateCard] = useState(false);
+    const dispatch = useDispatch();
+
+    const onSubmitInput = useCallback((text) => {
+        const newCard = {
+            id: new Date().getTime().toString(),
+            title: text,
+        };
+        dispatch(columnActions.addCardToColumn({columnId: column.id, card: newCard}));
+
+        setShowCreateCard(false);
+    }, [dispatch, column.id]);
+
+    const onCreateButton = useCallback(() => {
+        setShowCreateCard(true);
+    }, []);
+
+    const onOutsideClick = useCallback(() => {
+        setShowCreateCard(false);
+    }, []);
     return (
-        <Draggable draggableId={currentColumn.id} index={index}>
+        <Draggable draggableId={column.id} index={index}>
             {(columnDraggableProvider, draggableSnapshot) => (
                 <Box
                     onMouseEnter={() => setOnHover(true)}
@@ -21,6 +44,7 @@ const Column = ({column, index}) => {
                         display: 'flex',
                         flexDirection: 'column',
                         backgroundColor: 'black',
+                        cursor: "default!important",
                         marginLeft: '4px',
                         marginRight: '4px',
                         paddingLeft: '4px',
@@ -28,10 +52,10 @@ const Column = ({column, index}) => {
                     }}
                 >
                     <Typography variant="h6" component="h2">
-                        {currentColumn.title}
+                        {column.title}
                     </Typography>
                     <Droppable
-                        droppableId={currentColumn.id}
+                        droppableId={column.id}
                         type="CARD"
                     >
                         {(droppableCardProvider, droppableSnapshot) => (
@@ -48,24 +72,17 @@ const Column = ({column, index}) => {
                                         paddingRight: '128px',
                                     }}
                                 ></Box>
-                                {currentColumn.cards.map((card, index) => (
+                                {column.cards.map((card, index) => (
                                     <Card key={card.id} card={card} index={index}/>
                                 ))}
                                 {droppableCardProvider.placeholder}
-                                <Paper
-                                    sx={{
-                                        margin: '22px 4px',
-                                        display: 'flex',
-                                        alignItems: 'flex-start'
-                                    }}
-                                >
-                                    <InputBase
-                                        sx={{ml: 1, flex: 1}}
-                                        placeholder="What needs to be done"
-                                        inputProps={{'aria-label': 'search google maps'}}
-                                    />
-                                </Paper>
-                                <CreateIssueButton shouldBeShown={onHover || currentColumn.showAddCardByDefault}/>
+                                <OutsideClickHandler onOutsideClick={onOutsideClick}>
+                                    {showCreateCard && <CreateCard onSubmit={onSubmitInput}/>}
+                                </OutsideClickHandler>
+                                {!showCreateCard && <CreateIssueButton
+                                    shouldBeShown={onHover || column.showAddCardByDefault}
+                                    clickHandler={onCreateButton}
+                                />}
                             </Box>
                         )}
                     </Droppable>
@@ -74,29 +91,6 @@ const Column = ({column, index}) => {
         </Draggable>
     );
 };
-const CreateIssueButton = ({shouldBeShown}) => {
-    return (
-        shouldBeShown ? (
-            <Button
-                variant="text"
-                sx={{
-                    display: 'block',
-                    textTransform: "none",
-                    width: '100%',
-                    textAlign: 'left',
-                    color: 'lightgray',
-                }}
-            >
-                + Create issue
-            </Button>
-        ) : (
-            <div style={{
-                width: '100%',
-                height: '36px', // Set height to match the button's height
-                textAlign: 'left',
-            }}>
-            </div>
-        )
-    );
-};
+
+
 export default Column;
