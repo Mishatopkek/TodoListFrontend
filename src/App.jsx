@@ -8,7 +8,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {columnActions} from "./store/columns.js";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add';
-import {useCallback} from "react";
+import {useCallback, useState} from "react";
+import OutsideClickHandler from "./components/wrappers/OutsideClickHandler.jsx";
+import CreateColumn from "./components/UI/Column/CreateColumn.jsx";
 
 function App() {
     const darkTheme = createTheme({
@@ -16,16 +18,33 @@ function App() {
             mode: 'dark',
         },
     });
+    const [showCreateColumn, setShowCreateColumn] = useState(false);
     const dispatch = useDispatch();
     const columns = useSelector(state => state.column);
     const onIconButtonClick = useCallback((event) => {
+        setShowCreateColumn(true);
+    }, []);
+
+    const onOutsideClick = useCallback(() => {
+        setShowCreateColumn(false);
+    }, []);
+
+    const onCancelColumn = useCallback(() => {
+        setShowCreateColumn(false);
+    }, []);
+
+    const onSubmitColumn = useCallback((title) => {
+        if (title.length < 3) {
+            return;
+        }
+
         dispatch(columnActions.addColumn({
             id: Date.now().toString(),
-            title: "New column",
+            title: title,
             cards: []
         }));
+        setShowCreateColumn(false);
     }, [dispatch]);
-
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -80,9 +99,13 @@ function App() {
                                     {provided.placeholder}
 
                                     <Box>
-                                        <IconButton aria-label="add" onClick={onIconButtonClick}>
+                                        <OutsideClickHandler onOutsideClick={onOutsideClick}>
+                                            {showCreateColumn &&
+                                                <CreateColumn onSubmit={onSubmitColumn} onCancel={onCancelColumn}/>}
+                                        </OutsideClickHandler>
+                                        {!showCreateColumn && <IconButton aria-label="add" onClick={onIconButtonClick}>
                                             <AddIcon/>
-                                        </IconButton>
+                                        </IconButton>}
                                     </Box>
                                 </Box>
                             )}
