@@ -8,9 +8,12 @@ import {useDispatch} from "react-redux";
 import {columnActions} from "../../store/columns.js";
 import CreateIssueButton from "./Column/CreateIssueButton.jsx";
 import CreateCard from "./Column/CreateCard.jsx";
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import IconButton from "@mui/material/IconButton";
 
 const Column = ({column, index}) => {
-    const [onHover, setOnHover] = useState(false);
+    const [onColumnHover, setOnColumnHover] = useState(false);
+    const [onColumnHeaderHover, setOnColumnHeaderHover] = useState(false);
     const [showCreateCard, setShowCreateCard] = useState(false);
     const dispatch = useDispatch();
 
@@ -31,12 +34,13 @@ const Column = ({column, index}) => {
     const onOutsideClick = useCallback(() => {
         setShowCreateCard(false);
     }, []);
+
     return (
         <Draggable draggableId={column.id} index={index}>
             {(columnDraggableProvider, draggableSnapshot) => (
                 <Box
-                    onMouseEnter={() => setOnHover(true)}
-                    onMouseLeave={() => setOnHover(false)}
+                    onMouseEnter={() => setOnColumnHover(true)}
+                    onMouseLeave={() => setOnColumnHover(false)}
                     ref={columnDraggableProvider.innerRef}
                     {...columnDraggableProvider.draggableProps}
                     {...columnDraggableProvider.dragHandleProps}
@@ -51,9 +55,24 @@ const Column = ({column, index}) => {
                         paddingRight: '4px',
                     }}
                 >
-                    <Typography variant="h6" component="h2">
-                        {column.title}
-                    </Typography>
+                    <Box
+                        onMouseEnter={() => setOnColumnHeaderHover(true)}
+                        onMouseLeave={() => setOnColumnHeaderHover(false)}
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}>
+                        <Typography variant="h6" component="h2" sx={{padding: "4px 0"}}>
+                            {column.title}
+                        </Typography>
+                        {/*https://mui.com/material-ui/react-menu/*/}
+                        {onColumnHeaderHover &&
+                            <IconButton aria-label="more">
+                                <MoreHorizIcon sx={{fontSize: '1.5rem'}}/>
+                            </IconButton>
+                        }
+                    </Box>
                     <Droppable
                         droppableId={column.id}
                         type="CARD"
@@ -80,7 +99,7 @@ const Column = ({column, index}) => {
                                     {showCreateCard && <CreateCard onSubmit={onSubmitInput}/>}
                                 </OutsideClickHandler>
                                 {!showCreateCard && <CreateIssueButton
-                                    shouldBeShown={onHover || column.showAddCardByDefault}
+                                    shouldBeShown={onColumnHover || column.showAddCardByDefault}
                                     clickHandler={onCreateButton}
                                 />}
                             </Box>
