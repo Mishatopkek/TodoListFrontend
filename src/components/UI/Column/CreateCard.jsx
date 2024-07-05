@@ -18,6 +18,7 @@ const CreateCard = ({onSubmit}) => {
         }}
     >
         <InputBase
+            autoFocus
             sx={{
                 ml: 1,
                 flex: 1,

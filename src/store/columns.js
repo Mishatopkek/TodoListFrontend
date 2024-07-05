@@ -82,13 +82,10 @@ const columnSlice = createSlice({
         },
     ],
     reducers: {
-        addColumn(state, action) {
-            state.push(action.payload);
+        remove(state, action) {
+            return state.filter((column) => column.id !== action.payload);
         },
-        removeColumn(state, action) {
-            state = state.columns.filter((column) => column.id !== action.payload);
-        },
-        updateColumn(state, action) {
+        update(state, action) {
             const column = state.columns.find((column) => column.id === action.payload.id);
             column.title = action.payload.title;
         },

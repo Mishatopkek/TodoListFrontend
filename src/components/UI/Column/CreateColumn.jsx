@@ -1,4 +1,4 @@
-﻿import {useCallback} from "react";
+﻿import {useCallback, useRef} from "react";
 import {Paper} from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 import DoneIcon from '@mui/icons-material/Done';
@@ -7,14 +7,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import Box from "@mui/material/Box";
 
 const CreateColumn = ({onSubmit, onCancel}) => {
+    const inputRef = useRef(null);
     const onInputChange = useCallback((e) => {
         if (e.key === 'Enter') {
-            onSubmit(e.target.value);
+            const inputValue = inputRef.current.value;
+            onSubmit(inputValue);
         }
     }, [onSubmit]);
 
     const onDoneHandler = useCallback((event) => {
-        onSubmit(event.target.value);
+        onSubmit(inputRef.current.value);
     }, [onSubmit]);
     const onCloseHandler = useCallback(() => {
         onCancel();
@@ -33,6 +35,8 @@ const CreateColumn = ({onSubmit, onCancel}) => {
             }}
         >
             <InputBase
+                autoFocus
+                inputRef={inputRef}
                 sx={{
                     ml: 1,
                     flex: 1,
@@ -40,7 +44,7 @@ const CreateColumn = ({onSubmit, onCancel}) => {
                     margin: '0',
                     padding: '8px'
                 }} //The Margin should be accurate to match the Jira card
-                placeholder="What needs to be done"
+                placeholder="What stage should be added?"
                 inputProps={{'aria-label': 'search google maps'}}
                 onKeyDown={onInputChange}/>
         </Paper>

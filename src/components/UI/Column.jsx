@@ -10,12 +10,16 @@ import CreateIssueButton from "./Column/CreateIssueButton.jsx";
 import CreateCard from "./Column/CreateCard.jsx";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import IconButton from "@mui/material/IconButton";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
 
 const Column = ({column, index}) => {
     const [onColumnHover, setOnColumnHover] = useState(false);
     const [onColumnHeaderHover, setOnColumnHeaderHover] = useState(false);
     const [showCreateCard, setShowCreateCard] = useState(false);
     const dispatch = useDispatch();
+    const [onColumnOption, setOnColumnOption] = useState(null);
+    const isColumnSettingsOpen = Boolean(onColumnOption);
 
     const onSubmitInput = useCallback((text) => {
         const newCard = {
@@ -34,6 +38,16 @@ const Column = ({column, index}) => {
     const onOutsideClick = useCallback(() => {
         setShowCreateCard(false);
     }, []);
+    const handleClick = (event) => {
+        setOnColumnOption(event.currentTarget);
+    };
+    const handleClose = () => {
+        setOnColumnOption(null);
+    };
+    const onDeleteColumn = () => {
+        setOnColumnOption(null);
+        dispatch(columnActions.remove(column.id));
+    };
 
     return (
         <Draggable draggableId={column.id} index={index}>
@@ -68,10 +82,26 @@ const Column = ({column, index}) => {
                         </Typography>
                         {/*https://mui.com/material-ui/react-menu/*/}
                         {onColumnHeaderHover &&
-                            <IconButton aria-label="more">
+                            <IconButton
+                                aria-label="more"
+                                aria-controls={isColumnSettingsOpen ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={isColumnSettingsOpen ? 'true' : undefined}
+                                onClick={handleClick}>
                                 <MoreHorizIcon sx={{fontSize: '1.5rem'}}/>
                             </IconButton>
                         }
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={onColumnOption}
+                            open={isColumnSettingsOpen}
+                            onClose={handleClose}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuItem onClick={onDeleteColumn}>Delete</MenuItem>
+                        </Menu>
                     </Box>
                     <Droppable
                         droppableId={column.id}
