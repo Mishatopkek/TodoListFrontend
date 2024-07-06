@@ -81,16 +81,27 @@ const Column = ({column, index}) => {
                             {column.title}
                         </Typography>
                         {/*https://mui.com/material-ui/react-menu/*/}
-                        {onColumnHeaderHover &&
+                        {onColumnHeaderHover ? (
                             <IconButton
                                 aria-label="more"
                                 aria-controls={isColumnSettingsOpen ? 'basic-menu' : undefined}
                                 aria-haspopup="true"
                                 aria-expanded={isColumnSettingsOpen ? 'true' : undefined}
-                                onClick={handleClick}>
+                                onClick={handleClick}
+                            >
                                 <MoreHorizIcon sx={{fontSize: '1.5rem'}}/>
                             </IconButton>
-                        }
+                        ) : (
+                            <Box sx={{
+                                width: '40px',
+                                height: '40px',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Box sx={{width: '1.5rem', height: '1.5rem'}}/>
+                            </Box>
+                        )}
                         <Menu
                             id="basic-menu"
                             anchorEl={onColumnOption}
