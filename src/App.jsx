@@ -38,7 +38,7 @@ function App() {
             return;
         }
 
-        dispatch(columnActions.addColumn({
+        dispatch(columnActions.add({
             id: Date.now().toString(),
             title: title,
             cards: []
