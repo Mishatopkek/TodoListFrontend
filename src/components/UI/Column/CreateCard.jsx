@@ -2,12 +2,15 @@
 import {Paper} from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 
-const CreateCard = ({onSubmit}) => {
-    const onInputChange = useCallback((e) => {
-        if (e.key === 'Enter') {
-            onSubmit(e.target.value);
+const CreateCard = ({onSubmit, onCancel}) => {
+    const onInputChange = useCallback((event) => {
+        if (event.key === 'Enter') {
+            onSubmit(event.target.value);
         }
-    }, [onSubmit]);
+        if (event.key === 'Escape') {
+            onCancel();
+        }
+    }, [onSubmit, onCancel]);
 
     return <Paper
         sx={{

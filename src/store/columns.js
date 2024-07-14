@@ -83,22 +83,31 @@ const columnSlice = createSlice({
     ],
     reducers: {
         add(state, action) {
-            state.push(action.payload);
+            const columns = state;
+            const column = action.payload;
+
+            columns.push(column);
         },
         remove(state, action) {
-            return state.filter((column) => column.id !== action.payload);
+            const columns = state;
+            const id = action.payload;
+
+            return columns.filter((column) => column.id !== id);
         },
         update(state, action) {
-            const column = state.columns.find((column) => column.id === action.payload.id);
-            column.title = action.payload.title;
+            const columns = state;
+            const {id, title} = action.payload;
+
+            const column = columns.find((column) => column.id === id);
+            column.title = title;
         },
         updateColumnsInBoard(state, action) {
             const columns = state;
             const dropResult = action.payload;
 
-            const element = columns.find(x => x.id === dropResult.draggableId);
-            columns.splice(columns.indexOf(element), 1);
-            columns.splice(dropResult.destination.index, 0, element);
+            const sourceColumn = columns.find(x => x.id === dropResult.draggableId);
+            columns.splice(columns.indexOf(sourceColumn), 1);
+            columns.splice(dropResult.destination.index, 0, sourceColumn);
         },
         updateCardsInColumns(state, action) {
             const columns = state;

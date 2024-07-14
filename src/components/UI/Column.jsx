@@ -76,7 +76,7 @@ const Column = ({column, index}) => {
                                 ))}
                                 {droppableCardProvider.placeholder}
                                 <OutsideClickHandler onOutsideClick={onOutsideClick}>
-                                    {showCreateCard && <CreateCard onSubmit={onSubmitInput}/>}
+                                    {showCreateCard && <CreateCard onSubmit={onSubmitInput} onCancel={onOutsideClick}/>}
                                 </OutsideClickHandler>
                                 {!showCreateCard && <CreateIssueButton
                                     shouldBeShown={onColumnHover || column.showAddCardByDefault}

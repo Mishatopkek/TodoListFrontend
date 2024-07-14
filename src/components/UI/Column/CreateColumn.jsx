@@ -8,12 +8,15 @@ import Box from "@mui/material/Box";
 
 const CreateColumn = ({onSubmit, onCancel}) => {
     const inputRef = useRef(null);
-    const onInputChange = useCallback((e) => {
-        if (e.key === 'Enter') {
+    const onInputChange = useCallback((event) => {
+        if (event.key === 'Enter') {
             const inputValue = inputRef.current.value;
             onSubmit(inputValue);
         }
-    }, [onSubmit]);
+        if (event.key === 'Escape') {
+            onCancel();
+        }
+    }, [onSubmit, onCancel]);
 
     const onDoneHandler = useCallback((event) => {
         onSubmit(inputRef.current.value);
