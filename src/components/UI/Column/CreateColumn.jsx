@@ -1,7 +1,7 @@
 ﻿import {useCallback, useRef} from "react";
 import InputWithButtons from "../InputWithButtons.jsx";
 
-const CreateColumn = ({onSubmit, onCancel}) => {
+const CreateColumn = ({onSubmit, onCancel, onOutsideClick}) => {
     const inputRef = useRef(null);
     const onInputChange = useCallback((event) => {
         if (event.key === 'Enter') {
@@ -26,6 +26,7 @@ const CreateColumn = ({onSubmit, onCancel}) => {
         onInputChange={onInputChange}
         onDone={onDoneHandler}
         onClose={onCloseHandler}
+        onOutsideClick={onOutsideClick}
         placeholder={"What stage should be added?"}
         inputSx={{
             ml: 1,

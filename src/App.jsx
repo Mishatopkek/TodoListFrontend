@@ -9,7 +9,6 @@ import {columnActions} from "./store/columns.js";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add';
 import {useCallback, useState} from "react";
-import OutsideClickHandler from "./components/wrappers/OutsideClickHandler.jsx";
 import CreateColumn from "./components/UI/Column/CreateColumn.jsx";
 
 function App() {
@@ -99,10 +98,12 @@ function App() {
                                     {provided.placeholder}
 
                                     <Box>
-                                        <OutsideClickHandler onOutsideClick={onOutsideClick}>
                                             {showCreateColumn &&
-                                                <CreateColumn onSubmit={onSubmitColumn} onCancel={onCancelColumn}/>}
-                                        </OutsideClickHandler>
+                                                <CreateColumn
+                                                    onSubmit={onSubmitColumn}
+                                                    onCancel={onCancelColumn}
+                                                    onOutsideClick={onOutsideClick}
+                                                />}
                                         {!showCreateColumn && <IconButton aria-label="add" onClick={onIconButtonClick}>
                                             <AddIcon/>
                                         </IconButton>}

@@ -4,10 +4,20 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import DoneIcon from "@mui/icons-material/Done.js";
 import CloseIcon from "@mui/icons-material/Close.js";
+import OutsideClickHandler from "../wrappers/OutsideClickHandler.jsx";
 
-const InputWithButtons = ({inputRef, onInputChange, onDone, onClose, placeholder, inputSx, defaultValue = null}) => {
+const InputWithButtons = ({
+                              inputRef,
+                              onInputChange,
+                              onDone,
+                              onClose,
+                              onOutsideClick,
+                              placeholder,
+                              inputSx,
+                              defaultValue = null
+                          }) => {
     return (
-        <>
+        <OutsideClickHandler onOutsideClick={onOutsideClick}>
             <Paper
                 sx={{
                     minWidth: 256,
@@ -56,7 +66,7 @@ const InputWithButtons = ({inputRef, onInputChange, onDone, onClose, placeholder
                     </IconButton>
                 </Box>
             </Box>
-        </>
+        </OutsideClickHandler>
     );
 };
 export default InputWithButtons;

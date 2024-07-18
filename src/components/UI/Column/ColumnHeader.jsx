@@ -7,7 +7,6 @@ import MenuItem from "@mui/material/MenuItem";
 import {columnActions} from "../../../store/columns.js";
 import {useRef, useState} from "react";
 import {useDispatch} from "react-redux";
-import OutsideClickHandler from "../../wrappers/OutsideClickHandler.jsx";
 import {useTheme} from "@mui/material/styles";
 import InputWithButtons from "../InputWithButtons.jsx";
 
@@ -33,7 +32,7 @@ const ColumnHeader = ({column}) => {
         dispatch(columnActions.remove(column.id));
     };
 
-    const onClickOutside = () => {
+    const onOutsideClick = () => {
         onSaveTitle();
         setIsOnSetTitle(false);
     }
@@ -69,20 +68,19 @@ const ColumnHeader = ({column}) => {
                 alignItems: 'center',
             }}>
             {isOnSetTitle ?
-                <OutsideClickHandler onOutsideClick={onClickOutside}>
-                    <InputWithButtons
-                        inputRef={inputRef}
-                        onInputChange={onChangeTitle}
-                        onDone={onSaveTitle}
-                        onClose={onSaveTitle}
-                        placeholder={"What stage should be added?"}
-                        defaultValue={column.title}
-                        inputSx={{
-                            fontSize: theme.typography.h6.fontSize,
-                            maxWidth: 'fit-content', // Limit the width of InputBase
-                            height: "36px"
-                        }}/>
-                </OutsideClickHandler> :
+                <InputWithButtons
+                    inputRef={inputRef}
+                    onInputChange={onChangeTitle}
+                    onDone={onSaveTitle}
+                    onClose={onSaveTitle}
+                    onOutsideClick={onOutsideClick}
+                    placeholder={"What stage should be added?"}
+                    defaultValue={column.title}
+                    inputSx={{
+                        fontSize: theme.typography.h6.fontSize,
+                        maxWidth: 'fit-content', // Limit the width of InputBase
+                        height: "36px"
+                    }}/> :
                 <Box
                     onMouseEnter={() => setTitleHover(true)}
                     onMouseLeave={() => setTitleHover(false)}
