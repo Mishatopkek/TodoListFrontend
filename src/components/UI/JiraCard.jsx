@@ -1,9 +1,11 @@
 ﻿import {Card, Tooltip, Typography} from "@mui/material";
 import {Draggable} from "@hello-pangea/dnd";
 import Box from "@mui/material/Box";
+import {useState} from "react";
 
 
 const JiraCard = ({card, index}) => {
+    const [onCardHover, setOnCardHover] = useState(false);
     return (<Draggable
         draggableId={card.id}
         index={index}>
@@ -17,7 +19,15 @@ const JiraCard = ({card, index}) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}>
-            <Card sx={{padding: '8px', cursor: 'pointer'}}>
+            <Card
+                onMouseEnter={() => setOnCardHover(true)}
+                onMouseLeave={() => setOnCardHover(false)}
+                sx={{
+                    padding: '8px',
+                    cursor: 'pointer',
+                    backgroundColor: onCardHover ? "#252525" : "#121212",
+                    transition: "background 0.2s ease 0s"
+                }}>
                 <Tooltip title={card.title} placement="bottom-start">
                     <Typography
                         variant="body2"
