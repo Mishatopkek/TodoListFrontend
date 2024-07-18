@@ -8,8 +8,8 @@ import {columnActions} from "../../../store/columns.js";
 import {useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import OutsideClickHandler from "../../wrappers/OutsideClickHandler.jsx";
-import InputBase from "@mui/material/InputBase";
 import {useTheme} from "@mui/material/styles";
+import InputWithButtons from "../InputWithButtons.jsx";
 
 const ColumnHeader = ({column}) => {
     const theme = useTheme();
@@ -34,6 +34,7 @@ const ColumnHeader = ({column}) => {
     };
 
     const onClickOutside = () => {
+        onSaveTitle();
         setIsOnSetTitle(false);
     }
 
@@ -43,15 +44,19 @@ const ColumnHeader = ({column}) => {
         setTitleHover(false);
     }
 
-    const onSaveTitle = (event) => {
+    const onChangeTitle = (event) => {
         if (event.key === 'Enter' || event.key === 'Escape') {
-            const inputValue = inputRef.current.value;
-            dispatch(columnActions.update({
-                id: column.id,
-                title: inputValue
-            }));
-            setIsOnSetTitle(false);
+            onSaveTitle();
         }
+    }
+
+    const onSaveTitle = () => {
+        const inputValue = inputRef.current.value;
+        dispatch(columnActions.update({
+            id: column.id,
+            title: inputValue
+        }));
+        setIsOnSetTitle(false);
     }
 
     return (
@@ -65,18 +70,18 @@ const ColumnHeader = ({column}) => {
             }}>
             {isOnSetTitle ?
                 <OutsideClickHandler onOutsideClick={onClickOutside}>
-                    <InputBase
-                        autoFocus
+                    <InputWithButtons
                         inputRef={inputRef}
-                        sx={{
+                        onInputChange={onChangeTitle}
+                        onDone={onSaveTitle}
+                        onClose={onSaveTitle}
+                        placeholder={"What stage should be added?"}
+                        defaultValue={column.title}
+                        inputSx={{
                             fontSize: theme.typography.h6.fontSize,
                             maxWidth: 'fit-content', // Limit the width of InputBase
-                            height: "40px"
-                        }}
-                        placeholder="What needs to be done"
-                        defaultValue={column.title}
-                        inputProps={{'aria-label': 'search google maps'}}
-                        onKeyDown={onSaveTitle}/>
+                            height: "36px"
+                        }}/>
                 </OutsideClickHandler> :
                 <Box
                     onMouseEnter={() => setTitleHover(true)}
