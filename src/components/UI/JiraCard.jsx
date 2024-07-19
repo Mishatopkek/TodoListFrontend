@@ -7,12 +7,22 @@ import IconButton from "@mui/material/IconButton";
 import InputWithButtons from "./InputWithButtons.jsx";
 import {columnActions} from "../../store/columns.js";
 import {useDispatch} from "react-redux";
+import CardModal from "./CardModal.jsx";
 
 const JiraCard = ({card, index}) => {
     const dispatch = useDispatch();
     const titleChangeRef = useRef(null);
     const [onCardHover, setOnCardHover] = useState(false);
     const [onEditTitle, setOnEditTitle] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleClickCard = useCallback(() => {
+        setOpenModal(true);
+    }, []);
+
+    const handleCloseModal = useCallback(() => {
+        setOpenModal(false);
+    }, []);
 
     const handleEditClick = useCallback(() => {
         setOnEditTitle(true);
@@ -54,6 +64,7 @@ const JiraCard = ({card, index}) => {
             <Card
                 onMouseEnter={() => setOnCardHover(true)}
                 onMouseLeave={() => setOnCardHover(false)}
+                onClick={handleClickCard}
                 sx={{
                     padding: '8px',
                     cursor: 'pointer',
@@ -102,7 +113,10 @@ const JiraCard = ({card, index}) => {
                                     // aria-controls={isColumnSettingsOpen ? 'basic-menu' : undefined}
                                     aria-haspopup="true"
                                     // aria-expanded={isColumnSettingsOpen ? 'true' : undefined}
-                                    onClick={handleEditClick}
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        handleEditClick();
+                                    }}
                                     sx={{
                                         padding: "4px",
                                         transition: 'transform 0.2s ease-in-out',
@@ -124,6 +138,11 @@ const JiraCard = ({card, index}) => {
                     ❤️ KAN-123
                 </Typography>
             </Card>
+            <CardModal
+                openModalState={openModal}
+                onClose={handleCloseModal}
+                card={card}
+            />
         </Box>)}
     </Draggable>);
 };

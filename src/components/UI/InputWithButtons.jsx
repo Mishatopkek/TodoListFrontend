@@ -19,9 +19,11 @@ const InputWithButtons = (
         defaultValue = null
     }) => {
     return (
-        <OutsideClickHandler onOutsideClick={onOutsideClick}>
+        <OutsideClickHandler
+            onOutsideClick={onOutsideClick}>
             <Paper
                 sx={paperSx}
+                onClick={event => event.stopPropagation()}
             >
                 <InputBase
                     autoFocus
@@ -32,9 +34,9 @@ const InputWithButtons = (
                     onKeyDown={onInputChange}
                     defaultValue={defaultValue}/>
             </Paper>
-            <Box sx={{
-                position: 'relative',
-            }}>
+            <Box
+                sx={{position: 'relative'}}
+                onClick={event => event.stopPropagation()}>
                 <Box sx={{
                     position: 'absolute',
                     top: '5px',
