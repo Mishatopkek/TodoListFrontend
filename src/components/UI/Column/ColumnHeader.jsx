@@ -99,7 +99,7 @@ const ColumnHeader = ({column}) => {
                         transition: "background 0.2s ease 0s"
                     }}>
                     <Typography variant="h6" component="h2">
-                        {column.title}
+                        {column.title} {column.cards.length}
                     </Typography>
                 </Box>}
             {!isOnSetTitle && (
