@@ -28,6 +28,13 @@ const CreateColumn = ({onSubmit, onCancel, onOutsideClick}) => {
         onClose={onCloseHandler}
         onOutsideClick={onOutsideClick}
         placeholder={"What stage should be added?"}
+        paperSx={{
+            minWidth: 256,
+            maxWidth: 256,
+            marginTop: '4px',
+            display: 'flex',
+            alignItems: 'flex-start'
+        }}
         inputSx={{
             ml: 1,
             flex: 1,

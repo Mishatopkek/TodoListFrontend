@@ -76,6 +76,13 @@ const ColumnHeader = ({column}) => {
                     onOutsideClick={onOutsideClick}
                     placeholder={"What stage should be added?"}
                     defaultValue={column.title}
+                    paperSx={{
+                        minWidth: 256,
+                        maxWidth: 256,
+                        marginTop: '4px',
+                        display: 'flex',
+                        alignItems: 'flex-start'
+                    }}
                     inputSx={{
                         fontSize: theme.typography.h6.fontSize,
                         maxWidth: 'fit-content', // Limit the width of InputBase

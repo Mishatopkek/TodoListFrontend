@@ -129,9 +129,25 @@ const columnSlice = createSlice({
                 column.cards.push(card);
             }
         },
+        updateCard(state, action) {
+            const {id, title} = action.payload;
+            const columns = state;
+
+            const card = findCardById(columns, id);
+            card.title = title;
+        }
     }
 });
 
+function findCardById(columns, cardId) {
+    for (const column of columns) {
+        const card = column.cards.find(card => card.id === cardId);
+        if (card) {
+            return card;
+        }
+    }
+    return null; // or handle the case where the card is not found
+}
 export const columnActions = columnSlice.actions;
 
 export default columnSlice;

@@ -6,26 +6,22 @@ import DoneIcon from "@mui/icons-material/Done.js";
 import CloseIcon from "@mui/icons-material/Close.js";
 import OutsideClickHandler from "../wrappers/OutsideClickHandler.jsx";
 
-const InputWithButtons = ({
-                              inputRef,
-                              onInputChange,
-                              onDone,
-                              onClose,
-                              onOutsideClick,
-                              placeholder,
-                              inputSx,
-                              defaultValue = null
-                          }) => {
+const InputWithButtons = (
+    {
+        inputRef,
+        onInputChange,
+        onDone,
+        onClose,
+        onOutsideClick,
+        placeholder,
+        paperSx,
+        inputSx,
+        defaultValue = null
+    }) => {
     return (
         <OutsideClickHandler onOutsideClick={onOutsideClick}>
             <Paper
-                sx={{
-                    minWidth: 256,
-                    maxWidth: 256,
-                    marginTop: '4px',
-                    display: 'flex',
-                    alignItems: 'flex-start'
-                }}
+                sx={paperSx}
             >
                 <InputBase
                     autoFocus
@@ -49,20 +45,22 @@ const InputWithButtons = ({
                     <IconButton
                         aria-label="done"
                         onClick={onDone}
+                        size="small"
                         sx={{
                             backgroundColor: 'rgba(255, 255, 255, .1)',
                             boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
                         }}>
-                        <DoneIcon/>
+                        <DoneIcon fontSize="small"/>
                     </IconButton>
                     <IconButton
                         aria-label="close"
                         onClick={onClose}
+                        size="small"
                         sx={{
                             backgroundColor: 'rgba(255, 255, 255, .1)',
                             boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
                         }}>
-                        <CloseIcon/>
+                        <CloseIcon fontSize="small"/>
                     </IconButton>
                 </Box>
             </Box>
