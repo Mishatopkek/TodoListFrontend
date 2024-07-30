@@ -5,9 +5,9 @@ import {useCallback, useRef, useState} from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
 import InputWithButtons from "./InputWithButtons.jsx";
-import {columnActions} from "../../store/columns.js";
 import {useDispatch} from "react-redux";
 import CardModal from "./CardModal.jsx";
+import {columnActions} from "../../store/boards.js";
 
 const JiraCard = ({card, index}) => {
     const dispatch = useDispatch();
@@ -31,7 +31,7 @@ const JiraCard = ({card, index}) => {
     const onSaveTitle = useCallback(() => {
         const inputValue = titleChangeRef.current.value;
         dispatch(columnActions.updateCard({
-            id: card.id,
+            card: card,
             title: inputValue
         }));
         setOnEditTitle(false);

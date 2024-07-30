@@ -4,11 +4,11 @@ import IconButton from "@mui/material/IconButton";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz.js";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import {columnActions} from "../../../store/columns.js";
 import {useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useTheme} from "@mui/material/styles";
 import InputWithButtons from "../InputWithButtons.jsx";
+import {columnActions} from "../../../store/boards.js";
 
 const ColumnHeader = ({column}) => {
     const theme = useTheme();
@@ -29,7 +29,7 @@ const ColumnHeader = ({column}) => {
 
     const onDeleteColumn = () => {
         setOnColumnOption(null);
-        dispatch(columnActions.remove(column.id));
+        dispatch(columnActions.removeColumn(column.id));
     };
 
     const onOutsideClick = () => {
@@ -51,7 +51,7 @@ const ColumnHeader = ({column}) => {
 
     const onSaveTitle = () => {
         const inputValue = inputRef.current.value;
-        dispatch(columnActions.update({
+        dispatch(columnActions.updateColumn({
             id: column.id,
             title: inputValue
         }));

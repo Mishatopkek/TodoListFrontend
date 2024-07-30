@@ -42,7 +42,7 @@ const CardModal = ({openModalState, onClose, card}) => {
                     placeholder="Add a description..."
                     sx={{marginTop: "15px"}}
                 />
-                <CommentSection/>
+                <CommentSection card={card}/>
             </Box>
         </Modal>
     );

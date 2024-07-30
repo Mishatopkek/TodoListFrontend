@@ -2,8 +2,11 @@
 import Box from "@mui/material/Box";
 import {Avatar, Button, FormControl, InputLabel, Select, TextField, Typography} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import {useDispatch, useSelector} from "react-redux";
 
-const CommentSection = () => {
+const CommentSection = ({card}) => {
+    const dispatch = useDispatch();
+    const board = useSelector(state => state.board);
     const [comments, setComments] = useState([]);
     const [sortOrder, setSortOrder] = useState('newest');
     const [newComment, setNewComment] = useState('');
@@ -21,6 +24,7 @@ const CommentSection = () => {
             ...comments,
             {
                 id: crypto.randomUUID(),
+                cardId: card.id,
                 text: newComment,
                 date: new Date()
             },

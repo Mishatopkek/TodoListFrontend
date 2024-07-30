@@ -5,11 +5,11 @@ import Box from "@mui/material/Box";
 import {DragDropContext, Droppable} from "@hello-pangea/dnd";
 import Column from "./components/UI/Column.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {columnActions} from "./store/columns.js";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add';
 import {useCallback, useState} from "react";
 import CreateColumn from "./components/UI/Column/CreateColumn.jsx";
+import {columnActions} from "./store/boards.js";
 
 function App() {
     const darkTheme = createTheme({
@@ -19,7 +19,7 @@ function App() {
     });
     const [showCreateColumn, setShowCreateColumn] = useState(false);
     const dispatch = useDispatch();
-    const columns = useSelector(state => state.column);
+    const board = useSelector(state => state.board);
     const onIconButtonClick = useCallback((event) => {
         setShowCreateColumn(true);
     }, []);
@@ -37,8 +37,8 @@ function App() {
             return;
         }
 
-        dispatch(columnActions.add({
-            id: Date.now().toString(),
+        dispatch(columnActions.addColumn({
+            id: crypto.randomUUID(),
             title: title,
             cards: []
         }));
@@ -73,10 +73,10 @@ function App() {
 
                         // Column reorder
                         if (dropResult.source.droppableId === dropResult.destination.droppableId && dropResult.source.droppableId === "board") {
-                            dispatch(columnActions.updateColumnsInBoard(dropResult));
+                            dispatch(columnActions.updateColumnPosition(dropResult));
                         } else {
                             // Card move
-                            dispatch(columnActions.updateCardsInColumns(dropResult));
+                            dispatch(columnActions.updateCardPositionInColumn(dropResult));
                         }
                     }}>
                         <Droppable
@@ -92,7 +92,7 @@ function App() {
                                     {...provided.droppableProps}
                                     sx={{display: 'flex', height: '100%'}}
                                 >
-                                    {columns.map((column, index) =>
+                                    {board.columns.map((column, index) =>
                                         <Column key={column.id} index={index} column={column}/>
                                     )}
                                     {provided.placeholder}
@@ -119,7 +119,3 @@ function App() {
 }
 
 export default App
-
-const board = {
-    title: "KAN board"
-}

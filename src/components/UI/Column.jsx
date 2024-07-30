@@ -4,22 +4,27 @@ import {Draggable, Droppable} from "@hello-pangea/dnd";
 import {useCallback, useState} from "react";
 import OutsideClickHandler from "../wrappers/OutsideClickHandler.jsx";
 import {useDispatch} from "react-redux";
-import {columnActions} from "../../store/columns.js";
 import CreateIssueButton from "./Column/CreateIssueButton.jsx";
 import CreateCard from "./Column/CreateCard.jsx";
 import ColumnHeader from "./Column/ColumnHeader.jsx";
+import {columnActions} from "../../store/boards.js";
 
 const Column = ({column, index}) => {
     const [onColumnHover, setOnColumnHover] = useState(false);
     const [showCreateCard, setShowCreateCard] = useState(false);
     const dispatch = useDispatch();
 
-    const onSubmitInput = useCallback((text) => {
+    const onSubmitInput = useCallback((title) => {
+        if (title.length < 3) {
+            return;
+        }
+
         const newCard = {
-            id: new Date().getTime().toString(),
-            title: text,
+            id: crypto.randomUUID(),
+            columnId: column.id,
+            title: title
         };
-        dispatch(columnActions.addCardToColumn({columnId: column.id, card: newCard}));
+        dispatch(columnActions.addCard({columnId: column.id, card: newCard}));
 
         setShowCreateCard(false);
     }, [dispatch, column.id]);
