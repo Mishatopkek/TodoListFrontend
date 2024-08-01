@@ -18,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import {Button} from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -99,7 +100,7 @@ export default function MiniDrawer() {
     };
 
     return (
-        <Box sx={{display: 'flex'}}>
+        <Box sx={{flexGrow: 1}}>
             <CssBaseline/>
             <AppBar position="fixed" open={open}>
                 <Toolbar>
@@ -115,9 +116,10 @@ export default function MiniDrawer() {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
+                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         Mini variant drawer
                     </Typography>
+                    <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
