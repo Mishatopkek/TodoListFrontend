@@ -1,7 +1,6 @@
 ﻿import {useState} from "react";
 import Box from "@mui/material/Box";
-import {Avatar, Button, FormControl, InputLabel, Select, TextField, Typography} from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
+import {Avatar, Button, TextField, Typography} from "@mui/material";
 import {useDispatch} from "react-redux";
 import {boardActions} from "../../store/boards.js";
 
@@ -10,8 +9,8 @@ const CommentSection = ({card}) => {
     const [sortOrder, setSortOrder] = useState('newest');
     const [newComment, setNewComment] = useState('');
 
-    const handleSortChange = (event) => {
-        setSortOrder(event.target.value);
+    const handleSortChange = () => {
+        setSortOrder((prevOrder) => (prevOrder === 'newest' ? 'oldest' : 'newest'));
     };
 
     const handleCommentChange = (event) => {
@@ -19,6 +18,9 @@ const CommentSection = ({card}) => {
     };
 
     const addComment = () => {
+        if (newComment.length < 3) {
+            return;
+        }
         const comment = {
             id: crypto.randomUUID(),
             cardId: card.id,
@@ -38,19 +40,9 @@ const CommentSection = ({card}) => {
     return (
         <Box sx={{marginTop: "25px"}}>
             <Box sx={{display: 'flex', justifyContent: 'flex-end', marginBottom: "10px"}}>
-                <FormControl>
-                    <InputLabel id="sort-label">Sort by</InputLabel>
-                    <Select
-                        labelId="sort-label"
-                        id="sort-select"
-                        value={sortOrder}
-                        label="Sort by"
-                        onChange={handleSortChange}
-                    >
-                        <MenuItem value={'newest'}>Newest</MenuItem>
-                        <MenuItem value={'oldest'}>Oldest</MenuItem>
-                    </Select>
-                </FormControl>
+                <Button variant="text" onClick={handleSortChange}>
+                    {sortOrder === 'newest' ? 'Newest' : 'Oldest'}
+                </Button>
             </Box>
             <Box sx={{display: 'flex', alignItems: 'center', marginTop: "10px"}}>
                 <Avatar sx={{marginRight: "10px"}}>U</Avatar>
@@ -62,23 +54,64 @@ const CommentSection = ({card}) => {
                     onChange={handleCommentChange}
                     multiline
                 />
-                <Button onClick={addComment} sx={{marginLeft: "10px"}}>
+            </Box>
+            <Box sx={{display: 'flex', alignItems: 'center', marginTop: "10px"}}>
+                <Button variant="contained" onClick={addComment} sx={{marginLeft: "50px"}}>
                     Post
                 </Button>
+                <Button onClick={() => setNewComment('')} sx={{marginLeft: "10px"}}>
+                    Cancel (WIP)
+                </Button>
             </Box>
-            <Box>
+            <Box sx={{paddingTop: "30px"}}>
                 {sortedComments.map((comment) => (
-                    <Box key={comment.id} sx={{marginBottom: "10px"}}>
-                        <Typography variant="body2">
-                            {comment.text}
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                            {new Date(comment.date).toLocaleString()}
-                        </Typography>
+                    <Box key={comment.id} sx={{display: 'flex', alignItems: 'center', marginTop: "10px"}}>
+                        <Avatar sx={{marginRight: "10px"}}>U</Avatar>
+                        <Box>
+                            <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                <Typography variant="body1">
+                                    Bob
+                                </Typography>
+                                <Typography variant="caption" color="textSecondary" sx={{paddingLeft: "10px"}}>
+                                    {timeAgo(comment.date)}
+                                </Typography>
+                            </Box>
+                            <Typography variant="caption">
+                                {comment.text}
+                            </Typography>
+                        </Box>
                     </Box>
                 ))}
             </Box>
         </Box>
     );
 };
+
+function timeAgo(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const secondsPast = Math.floor((now - date) / 1000);
+
+    if (secondsPast < 60) {
+        return `${secondsPast} seconds ago`;
+    }
+    if (secondsPast < 3600) {
+        const minutes = Math.floor(secondsPast / 60);
+        return `${minutes} minutes ago`;
+    }
+    if (secondsPast < 86400) {
+        const hours = Math.floor(secondsPast / 3600);
+        return `${hours} hours ago`;
+    }
+    if (secondsPast < 2592000) {
+        const days = Math.floor(secondsPast / 86400);
+        return `${days} days ago`;
+    }
+    if (secondsPast < 31536000) {
+        const months = Math.floor(secondsPast / 2592000);
+        return `${months} months ago`;
+    }
+    const years = Math.floor(secondsPast / 31536000);
+    return `${years} years ago`;
+}
 export default CommentSection;
