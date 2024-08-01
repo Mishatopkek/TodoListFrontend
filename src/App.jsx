@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from '@mui/icons-material/Add';
 import {useCallback, useState} from "react";
 import CreateColumn from "./components/UI/Column/CreateColumn.jsx";
-import {columnActions} from "./store/boards.js";
+import {boardActions} from "./store/boards.js";
 
 function App() {
     const darkTheme = createTheme({
@@ -37,7 +37,7 @@ function App() {
             return;
         }
 
-        dispatch(columnActions.addColumn({
+        dispatch(boardActions.addColumn({
             id: crypto.randomUUID(),
             title: title,
             cards: []
@@ -73,10 +73,10 @@ function App() {
 
                         // Column reorder
                         if (dropResult.source.droppableId === dropResult.destination.droppableId && dropResult.source.droppableId === "board") {
-                            dispatch(columnActions.updateColumnPosition(dropResult));
+                            dispatch(boardActions.updateColumnPosition(dropResult));
                         } else {
                             // Card move
-                            dispatch(columnActions.updateCardPositionInColumn(dropResult));
+                            dispatch(boardActions.updateCardPositionInColumn(dropResult));
                         }
                     }}>
                         <Droppable

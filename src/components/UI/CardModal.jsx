@@ -3,6 +3,9 @@ import {Modal, TextField, Typography} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
 import CommentSection from "./CommentSection.jsx";
+import {useCallback, useRef} from "react";
+import {useDispatch} from "react-redux";
+import {boardActions} from "../../store/boards.js";
 
 const style = {
     position: 'absolute',
@@ -17,10 +20,18 @@ const style = {
 };
 
 const CardModal = ({openModalState, onClose, card}) => {
+    const inputRef = useRef(null);
+    const dispatch = useDispatch();
+
+    const closeHandler = useCallback(() => {
+        dispatch(boardActions.updateDetails({card, description: inputRef.current.value}));
+        onClose();
+    }, [onClose, dispatch, card]);
+
     return (
         <Modal
             open={openModalState}
-            onClose={onClose}
+            onClose={closeHandler}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
@@ -29,15 +40,17 @@ const CardModal = ({openModalState, onClose, card}) => {
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         {card.title}
                     </Typography>
-                    <IconButton onClick={onClose}>
+                    <IconButton onClick={closeHandler}>
                         <CloseIcon/>
                     </IconButton>
                 </Box>
                 <TextField
                     id="outlined-multiline-static"
+                    inputRef={inputRef}
                     label="Description"
                     multiline
                     fullWidth
+                    defaultValue={card.details.description}
                     rows={4}
                     placeholder="Add a description..."
                     sx={{marginTop: "15px"}}

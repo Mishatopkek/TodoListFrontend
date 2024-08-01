@@ -2,12 +2,11 @@
 import Box from "@mui/material/Box";
 import {Avatar, Button, FormControl, InputLabel, Select, TextField, Typography} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
+import {boardActions} from "../../store/boards.js";
 
 const CommentSection = ({card}) => {
     const dispatch = useDispatch();
-    const board = useSelector(state => state.board);
-    const [comments, setComments] = useState([]);
     const [sortOrder, setSortOrder] = useState('newest');
     const [newComment, setNewComment] = useState('');
 
@@ -20,20 +19,17 @@ const CommentSection = ({card}) => {
     };
 
     const addComment = () => {
-        const newComments = [
-            ...comments,
-            {
-                id: crypto.randomUUID(),
-                cardId: card.id,
-                text: newComment,
-                date: new Date()
-            },
-        ];
-        setComments(newComments);
+        const comment = {
+            id: crypto.randomUUID(),
+            cardId: card.id,
+            text: newComment,
+            date: new Date().toISOString()
+        };
+        dispatch(boardActions.addComment(comment));
         setNewComment('');
     };
 
-    const sortedComments = [...comments].sort((a, b) => {
+    const sortedComments = [...card.details.comments].sort((a, b) => {
         return sortOrder === 'newest'
             ? new Date(b.date) - new Date(a.date)
             : new Date(a.date) - new Date(b.date);

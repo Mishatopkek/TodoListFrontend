@@ -7,7 +7,7 @@ import {useDispatch} from "react-redux";
 import CreateIssueButton from "./Column/CreateIssueButton.jsx";
 import CreateCard from "./Column/CreateCard.jsx";
 import ColumnHeader from "./Column/ColumnHeader.jsx";
-import {columnActions} from "../../store/boards.js";
+import {boardActions} from "../../store/boards.js";
 
 const Column = ({column, index}) => {
     const [onColumnHover, setOnColumnHover] = useState(false);
@@ -24,7 +24,7 @@ const Column = ({column, index}) => {
             columnId: column.id,
             title: title
         };
-        dispatch(columnActions.addCard({columnId: column.id, card: newCard}));
+        dispatch(boardActions.addCard({columnId: column.id, card: newCard}));
 
         setShowCreateCard(false);
     }, [dispatch, column.id]);

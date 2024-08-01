@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import InputWithButtons from "./InputWithButtons.jsx";
 import {useDispatch} from "react-redux";
 import CardModal from "./CardModal.jsx";
-import {columnActions} from "../../store/boards.js";
+import {boardActions} from "../../store/boards.js";
 
 const JiraCard = ({card, index}) => {
     const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const JiraCard = ({card, index}) => {
 
     const onSaveTitle = useCallback(() => {
         const inputValue = titleChangeRef.current.value;
-        dispatch(columnActions.updateCard({
+        dispatch(boardActions.updateCard({
             card: card,
             title: inputValue
         }));

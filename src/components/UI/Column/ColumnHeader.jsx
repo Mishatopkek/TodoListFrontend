@@ -8,7 +8,7 @@ import {useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useTheme} from "@mui/material/styles";
 import InputWithButtons from "../InputWithButtons.jsx";
-import {columnActions} from "../../../store/boards.js";
+import {boardActions} from "../../../store/boards.js";
 
 const ColumnHeader = ({column}) => {
     const theme = useTheme();
@@ -29,7 +29,7 @@ const ColumnHeader = ({column}) => {
 
     const onDeleteColumn = () => {
         setOnColumnOption(null);
-        dispatch(columnActions.removeColumn(column.id));
+        dispatch(boardActions.removeColumn(column.id));
     };
 
     const onOutsideClick = () => {
@@ -51,7 +51,7 @@ const ColumnHeader = ({column}) => {
 
     const onSaveTitle = () => {
         const inputValue = inputRef.current.value;
-        dispatch(columnActions.updateColumn({
+        dispatch(boardActions.updateColumn({
             id: column.id,
             title: inputValue
         }));
