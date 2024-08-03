@@ -19,6 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import {Button} from "@mui/material";
+import {Link} from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -119,7 +120,8 @@ export default function MiniDrawer() {
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         Mini variant drawer
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <Button color="inherit" component={Link} to="/login">Sign in</Button>
+                    <Button color="inherit" component={Link} to="/signup">Sign up</Button>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>

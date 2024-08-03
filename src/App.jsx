@@ -3,6 +3,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Board from "./pages/Board.jsx";
 import Home from "./pages/Home.jsx";
 import UserDetail from "./pages/UserDetail.jsx";
+import Login from "./pages/Login.jsx";
 
 const router = createBrowserRouter([
     {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <Home/>
+            },
+            {
+                path: "login",
+                element: <Login/>
             },
             {
                 path: ":username",
