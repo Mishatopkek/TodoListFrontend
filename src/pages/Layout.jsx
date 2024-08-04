@@ -8,27 +8,25 @@ import BlackTheme from "../components/wrappers/BlackTheme.jsx";
 const Layout = () => {
 
     return (
-        <>
-            <BlackTheme>
-                <MiniDrawer/>
-                <main style={{
+        <BlackTheme>
+            <MiniDrawer/>
+            <main style={{
+                display: 'block',
+                overflowY: 'auto',
+                height: '100%'
+            }}>
+                <Box style={{
                     display: 'block',
                     overflowY: 'auto',
-                    height: '100%'
+                    paddingTop: 64,
+                    paddingLeft: 64 + 64, // left drawer + extra space
+                    height: '100%',
                 }}>
-                    <Box style={{
-                        display: 'block',
-                        overflowY: 'auto',
-                        paddingTop: 64,
-                        paddingLeft: 64 + 64, // left drawer + extra space
-                        height: '100%',
-                    }}>
-                        <CssBaseline/>
-                        <Outlet/>
-                    </Box>
-                </main>
-            </BlackTheme>
-        </>
+                    <CssBaseline/>
+                    <Outlet/>
+                </Box>
+            </main>
+        </BlackTheme>
     );
 };
 export default Layout;
