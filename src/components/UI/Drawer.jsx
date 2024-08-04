@@ -6,7 +6,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -117,9 +116,12 @@ export default function MiniDrawer() {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                    <Button color="inherit" variant="text" component={Link} to="/">
                         Mini variant drawer
-                    </Typography>
+                    </Button>
+
+                    <Box sx={{flexGrow: 1}}/>
+
                     <Button color="inherit" component={Link} to="/login">Sign in</Button>
                     <Button color="inherit" component={Link} to="/signup">Sign up</Button>
                 </Toolbar>
