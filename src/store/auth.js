@@ -1,4 +1,4 @@
-﻿import {createSlice} from "@reduxjs/toolkit";
+﻿import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {jwtDecode} from "jwt-decode";
 
 const notAuthCredentials = {
@@ -6,6 +6,21 @@ const notAuthCredentials = {
     user: null,
     token: null
 };
+
+export const checkToken = createAsyncThunk('auth/checkToken', async () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        const decodedToken = jwtDecode(token);
+        const isTokenExpired = decodedToken.exp * 1000 < Date.now();
+
+        if (isTokenExpired) {
+            localStorage.removeItem('token');
+            return null;
+        }
+        return token;
+    }
+    return null;
+});
 
 const authSlice = createSlice({
     name: "auth",
@@ -20,8 +35,18 @@ const authSlice = createSlice({
             }
         },
         logout(state, action) {
+            localStorage.removeItem("token")
             return notAuthCredentials;
-        }
+        },
+    },
+    extraReducers: (builder) => {
+        builder.addCase(checkToken.fulfilled, (state, action) => {
+            if (action.payload) {
+                state.isAuthenticated = true;
+                state.user = jwtDecode(action.payload);
+                state.token = action.payload;
+            }
+        })
     }
 })
 

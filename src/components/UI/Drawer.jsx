@@ -19,6 +19,8 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import {Button} from "@mui/material";
 import {Link} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {authActions} from "../../store/auth.js";
 
 const drawerWidth = 240;
 
@@ -88,6 +90,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 );
 
 export default function MiniDrawer() {
+    const dispatch = useDispatch();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -124,6 +127,7 @@ export default function MiniDrawer() {
 
                     <Button color="inherit" component={Link} to="/login">Sign in</Button>
                     <Button color="inherit" component={Link} to="/signup">Sign up</Button>
+                    <Button color="inherit" onClick={() => dispatch(authActions.logout())}>Logout</Button>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>

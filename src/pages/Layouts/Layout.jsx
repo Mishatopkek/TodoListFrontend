@@ -1,9 +1,9 @@
 ﻿import {Outlet} from "react-router-dom";
-import MiniDrawer from "../components/UI/Drawer.jsx";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import * as React from "react";
-import BlackTheme from "../components/wrappers/BlackTheme.jsx";
+import MiniDrawer from "../../components/UI/Drawer.jsx";
+import BlackTheme from "../../components/wrappers/BlackTheme.jsx";
 
 const Layout = () => {
 
