@@ -11,17 +11,36 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import BlackTheme from "../components/wrappers/BlackTheme.jsx";
+import {useDispatch} from "react-redux";
+import {authActions} from "../store/auth.js";
 
 export default function Login() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
+        const user = {
+            username: data.get('username'),
             password: data.get('password'),
-        });
+        };
+        try {
+
+            //Mock jwt, TODO remove this
+            const response = {
+                data: {
+                    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik1pc2hhIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MjI1NDc4MDAsImV4cCI6MTczMjU1MTQwMH0.lcINuF4acYXJMH2ubDpRX18LsrF5M5JOGiTLPhdVZVQ"
+                }
+            };
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            dispatch(authActions.loginSuccess(token));
+            navigate("/");
+        } catch (error) {
+            console.error('Login failed:', error);
+        }
     };
 
     return (
