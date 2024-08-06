@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import BlackTheme from "../components/wrappers/BlackTheme.jsx";
 import {useDispatch} from "react-redux";
 import {authActions} from "../store/auth.js";
@@ -19,6 +19,8 @@ import {authActions} from "../store/auth.js";
 export default function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -37,7 +39,9 @@ export default function Login() {
             const token = response.data.token;
             localStorage.setItem('token', token);
             dispatch(authActions.loginSuccess(token));
-            navigate("/");
+
+            const from = location.state?.from?.pathname || "/";
+            navigate(from, {replace: true});
         } catch (error) {
             console.error('Login failed:', error);
         }
