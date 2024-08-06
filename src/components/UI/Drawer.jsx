@@ -1,4 +1,5 @@
 ﻿import * as React from 'react';
+import {useCallback} from 'react';
 import {styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -19,8 +20,10 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import {Button} from "@mui/material";
 import {Link} from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {authActions} from "../../store/auth.js";
+import BasicMenu from "../wrappers/BasicMenu.jsx";
+import MenuItem from "@mui/material/MenuItem";
 
 const drawerWidth = 240;
 
@@ -93,6 +96,7 @@ export default function MiniDrawer() {
     const dispatch = useDispatch();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -101,6 +105,10 @@ export default function MiniDrawer() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const handleCreateProject = useCallback(() => {
+        
+    }, []);
 
     return (
         <Box sx={{flexGrow: 1}}>
@@ -120,14 +128,20 @@ export default function MiniDrawer() {
                         <MenuIcon/>
                     </IconButton>
                     <Button color="inherit" variant="text" component={Link} to="/">
-                        Mini variant drawer
+                        Todo list
                     </Button>
+                    {isAuthenticated &&
+                        <BasicMenu title="Projects">
+                            <MenuItem onClick={handleCreateProject}>Create project</MenuItem>
+                        </BasicMenu>
+                    }
 
                     <Box sx={{flexGrow: 1}}/>
 
-                    <Button color="inherit" component={Link} to="/login">Sign in</Button>
-                    <Button color="inherit" component={Link} to="/signup">Sign up</Button>
-                    <Button color="inherit" onClick={() => dispatch(authActions.logout())}>Logout</Button>
+                    {!isAuthenticated && <Button color="inherit" component={Link} to="/login">Sign in</Button>}
+                    {!isAuthenticated && <Button color="inherit" component={Link} to="/signup">Sign up</Button>}
+                    {isAuthenticated &&
+                        <Button color="inherit" onClick={() => dispatch(authActions.logout())}>Logout</Button>}
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
