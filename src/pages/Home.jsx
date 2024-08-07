@@ -10,6 +10,7 @@ const Home = () => {
     const navigate = useNavigate();
     const auth = useSelector(state => state.auth);
     const [projects, setProjects] = useState([{
+        id: "B6DED1FA-53E2-4EA6-9793-2E37E9920774",
         name: "SuperMisha",
         title: "The board full of Misha",
         author: "Misha"
@@ -25,7 +26,7 @@ const Home = () => {
             <Divider/>
             <Typography variant="h3">Recent projects</Typography>
             {projects.map(project => (
-                <BoardCard title={project.title} onClick={() => handleCardClick(project)}/>
+                <BoardCard key={project.id} title={project.title} onClick={() => handleCardClick(project)}/>
             ))}
             <Box>
                 <ul>
