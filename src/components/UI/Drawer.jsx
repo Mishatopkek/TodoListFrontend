@@ -19,7 +19,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import {Button} from "@mui/material";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {authActions} from "../../store/auth.js";
 import BasicMenu from "../wrappers/BasicMenu.jsx";
@@ -95,8 +95,9 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 export default function MiniDrawer() {
     const dispatch = useDispatch();
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const navigate = useNavigate();
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -109,6 +110,11 @@ export default function MiniDrawer() {
     const handleCreateProject = useCallback(() => {
         
     }, []);
+
+    const handleLogout = useCallback(() => {
+        dispatch(authActions.logout());
+        navigate("/");
+    }, [dispatch, navigate]);
 
     return (
         <Box sx={{flexGrow: 1}}>
@@ -141,7 +147,7 @@ export default function MiniDrawer() {
                     {!isAuthenticated && <Button color="inherit" component={Link} to="/login">Sign in</Button>}
                     {!isAuthenticated && <Button color="inherit" component={Link} to="/signup">Sign up</Button>}
                     {isAuthenticated &&
-                        <Button color="inherit" onClick={() => dispatch(authActions.logout())}>Logout</Button>}
+                        <Button color="inherit" onClick={handleLogout}>Logout</Button>}
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
