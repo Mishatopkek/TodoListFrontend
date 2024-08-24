@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import {useCallback, useState} from 'react';
+import {useCallback} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,17 +13,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import BlackTheme from "../components/wrappers/BlackTheme.jsx";
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import {authActions} from "../store/auth.js";
-import {useDispatch} from "react-redux";
-import config from "../../config.js";
+import {Link} from "react-router-dom";
+import useUserSignUp from "../api/Users/UserSignUp.js";
 
 export default function SignUp() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const location = useLocation();
-    // const [afterSignUp, setAfterSignUp] = useState(false);
-    const [validationErrors, setValidationErrors] = useState({});
+    const {signUp, validationErrors, setValidationErrors} = useUserSignUp();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -34,40 +28,16 @@ export default function SignUp() {
             password: data.get('password'),
         };
 
-        fetch(`${config.backendUrl}/api/User/SignUp`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(userData)
-        })
-            .then(response => {
-                if (response.status === 201) {
-                    return response.json().then(data => {
-                        const token = data.token;
-                        localStorage.setItem('token', token);
-                        dispatch(authActions.loginSuccess(token));
-
-                        const from = location.state?.from?.pathname || "/";
-                        navigate(from, {replace: true});
-                    });
-                } else if (response.status === 400 || response.status === 409) {
-                    return response.json().then(data => {
-                        setValidationErrors(data.errors);
-                    });
-                } else {
-                    // Handle other status codes
-                    console.error('Unexpected status code:', response.status);
-                }
-            });
+        signUp(userData).then();
     };
 
     const onInputChange = useCallback((inputName) => {
-        setValidationErrors(prevState => {
-            delete prevState[inputName];
-            return prevState;
-        })
-    }, []);
+        setValidationErrors((prevState) => {
+            const newState = {...prevState};
+            delete newState[inputName];
+            return newState;
+        });
+    }, [setValidationErrors]);
 
     return (
         <BlackTheme>
