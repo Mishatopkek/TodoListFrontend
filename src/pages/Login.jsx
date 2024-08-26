@@ -1,4 +1,5 @@
 ﻿import * as React from 'react';
+import {useCallback} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,41 +12,31 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import BlackTheme from "../components/wrappers/BlackTheme.jsx";
-import {useDispatch} from "react-redux";
-import {authActions} from "../store/auth.js";
+import useUserLogin from "../api/Users/UserLogin.js";
 
 export default function Login() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const location = useLocation();
+    const {signUp, validationErrors, setValidationErrors} = useUserLogin();
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const user = {
-            username: data.get('username'),
+        const userData = {
+            login: data.get('username'),
             password: data.get('password'),
         };
-        try {
 
-            //Mock jwt, TODO remove this
-            const response = {
-                data: {
-                    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6Ik1pc2hhIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MjI1NDc4MDAsImV4cCI6MTczMjU1MTQwMH0.lcINuF4acYXJMH2ubDpRX18LsrF5M5JOGiTLPhdVZVQ"
-                }
-            };
-            const token = response.data.token;
-            localStorage.setItem('token', token);
-            dispatch(authActions.loginSuccess(token));
-
-            const from = location.state?.from?.pathname || "/";
-            navigate(from, {replace: true});
-        } catch (error) {
-            console.error('Login failed:', error);
-        }
+        signUp(userData).then();
     };
+
+    const onInputChange = useCallback((inputName) => {
+        setValidationErrors((prevState) => {
+            const newState = {...prevState};
+            delete newState[inputName];
+            return newState;
+        });
+    }, [setValidationErrors]);
 
     return (
         <BlackTheme>
@@ -72,9 +63,12 @@ export default function Login() {
                             fullWidth
                             id="username"
                             label="Username or email address"
-                            name="email"
-                            autoComplete="email"
+                            name="username"
+                            autoComplete="username"
                             autoFocus
+                            onChange={() => onInputChange("login")}
+                            error={!!validationErrors.errors?.login}
+                            helperText={!!validationErrors.errors?.login && validationErrors.errors.login[0]}
                         />
                         <TextField
                             margin="normal"
@@ -85,7 +79,15 @@ export default function Login() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={() => onInputChange("password")}
+                            error={!!validationErrors.errors?.password}
+                            helperText={!!validationErrors.errors?.password && validationErrors.errors.password[0]}
                         />
+                        {validationErrors && validationErrors.statusCode === 404 && validationErrors.message && (
+                            <Typography color="error" variant="body2">
+                                {validationErrors.message}
+                            </Typography>
+                        )}
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary"/>}
                             label="Remember me"

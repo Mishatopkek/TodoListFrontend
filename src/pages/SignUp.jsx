@@ -1,4 +1,5 @@
 ﻿import * as React from 'react';
+import {useCallback} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,17 +14,30 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import BlackTheme from "../components/wrappers/BlackTheme.jsx";
 import {Link} from "react-router-dom";
+import useUserSignUp from "../api/Users/UserSignUp.js";
 
 export default function SignUp() {
+    const {signUp, validationErrors, setValidationErrors} = useUserSignUp();
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+        const userData = {
             name: data.get('username'),
             email: data.get('email'),
             password: data.get('password'),
-        });
+        };
+
+        signUp(userData).then();
     };
+
+    const onInputChange = useCallback((inputName) => {
+        setValidationErrors((prevState) => {
+            const newState = {...prevState};
+            delete newState[inputName];
+            return newState;
+        });
+    }, [setValidationErrors]);
 
     return (
         <BlackTheme>
@@ -53,6 +67,9 @@ export default function SignUp() {
                                     label="Username"
                                     name="username"
                                     autoComplete="username"
+                                    onChange={() => onInputChange("name")}
+                                    error={!!validationErrors.name}
+                                    helperText={!!validationErrors.name && validationErrors.name[0]}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -63,6 +80,9 @@ export default function SignUp() {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    onChange={() => onInputChange("email")}
+                                    error={!!validationErrors.email}
+                                    helperText={!!validationErrors.email && validationErrors.email[0]}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -74,6 +94,9 @@ export default function SignUp() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
+                                    onChange={() => onInputChange("password")}
+                                    error={!!validationErrors?.password}
+                                    helperText={!!validationErrors.password && validationErrors.password[0]}
                                 />
                             </Grid>
                             <Grid item xs={12}>
