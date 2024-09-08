@@ -108,8 +108,8 @@ export default function MiniDrawer() {
     };
 
     const handleCreateProject = useCallback(() => {
-        
-    }, []);
+        navigate("/new");
+    }, [navigate]);
 
     const handleLogout = useCallback(() => {
         dispatch(authActions.logout());

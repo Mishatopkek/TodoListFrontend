@@ -11,6 +11,7 @@ import {useDispatch} from "react-redux";
 import Layout from "./pages/Layouts/Layout.jsx";
 import AuthorizeRoute from "./pages/Layouts/AuthorizeRoute.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+import New from "./pages/New.jsx";
 
 const router = createBrowserRouter([
     {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <Home/>
+            },
+            {
+                path: "/new",
+                element: <New/>
             },
             {
                 path: ":username",
@@ -52,6 +57,10 @@ const router = createBrowserRouter([
     {
         path: "/signup",
         element: <SignUp/>
+    },
+    {
+        path: "/reset_password",
+        element: <ResetPassword/>
     },
     {
         path: "/reset_password",

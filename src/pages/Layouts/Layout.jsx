@@ -4,6 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import * as React from "react";
 import MiniDrawer from "../../components/UI/Drawer.jsx";
 import BlackTheme from "../../components/wrappers/BlackTheme.jsx";
+import Container from "@mui/material/Container";
 
 const Layout = () => {
 
@@ -19,11 +20,13 @@ const Layout = () => {
                     display: 'block',
                     overflowY: 'auto',
                     paddingTop: 64,
-                    paddingLeft: 64 + 64, // left drawer + extra space
+                    paddingLeft: 64, // left drawer + extra space
                     height: '100%',
                 }}>
                     <CssBaseline/>
-                    <Outlet/>
+                    <Container>
+                        <Outlet/>
+                    </Container>
                 </Box>
             </main>
         </BlackTheme>
