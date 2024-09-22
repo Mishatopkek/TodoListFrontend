@@ -1,17 +1,18 @@
 import './App.css'
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, redirect, RouterProvider} from "react-router-dom";
 import Board from "./pages/Board.jsx";
 import Home from "./pages/Home.jsx";
 import UserDetail from "./pages/UserDetail.jsx";
 import Login from "./pages/Login.jsx";
 import SignUp from "./pages/SignUp.jsx";
-import {checkToken} from "./store/auth.js";
-import {useEffect} from "react";
-import {useDispatch} from "react-redux";
 import Layout from "./pages/Layouts/Layout.jsx";
 import AuthorizeRoute from "./pages/Layouts/AuthorizeRoute.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import New from "./pages/New.jsx";
+import {useDispatch} from "react-redux";
+import {authActions} from "./store/auth.js";
+import store from "./store/index.js";
+import boardInitialize from "./api/Boards/BoardByName.js";
 
 const router = createBrowserRouter([
     {
@@ -42,7 +43,16 @@ const router = createBrowserRouter([
                         children: [
                             {
                                 index: true,
-                                element: <Board/>
+                                element: <Board/>,
+                                loader: async ({params}) => {
+                                    const project = params.project;
+                                    const {isAuthenticated, token} = store.getState().auth;
+                                    if (isAuthenticated) {
+                                        return boardInitialize(project, token);
+                                    } else {
+                                        return redirect("/login");
+                                    }
+                                },
                             }
                         ]
                     }
@@ -70,10 +80,7 @@ const router = createBrowserRouter([
 
 function App() {
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(checkToken());
-    }, [dispatch]);
+    dispatch(authActions.initialize());
 
     return <RouterProvider router={router}/>
 }

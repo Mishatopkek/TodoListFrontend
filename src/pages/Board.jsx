@@ -1,6 +1,6 @@
 ﻿import {CssBaseline, Typography} from "@mui/material";
 import {useCallback, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {boardActions} from "../store/boards.js";
 import Box from "@mui/material/Box";
 import {DragDropContext, Droppable} from "@hello-pangea/dnd";
@@ -8,11 +8,13 @@ import Column from "../components/UI/Column.jsx";
 import CreateColumn from "../components/UI/Column/CreateColumn.jsx";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add.js";
+import {useLoaderData} from "react-router-dom";
 
 const Board = () => {
-    const [showCreateColumn, setShowCreateColumn] = useState(false);
     const dispatch = useDispatch();
-    const board = useSelector(state => state.board);
+    const board = useLoaderData();
+    const [showCreateColumn, setShowCreateColumn] = useState(false);
+
     const onIconButtonClick = useCallback((event) => {
         setShowCreateColumn(true);
     }, []);
