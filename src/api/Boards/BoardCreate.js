@@ -7,24 +7,22 @@ const useBoardCreate = () => {
     const [validationErrors, setValidationErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const jwtToken = useSelector(state => state.auth);
+    const auth = useSelector(state => state.auth);
 
     const boardCreate = async (userData) => {
         setLoading(true);
         try {
-            console.log(jwtToken)
             const response = await fetch(`${config.backendUrl}/api/Board`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + jwtToken.token
+                    'Authorization': 'Bearer ' + auth.token
                 },
                 body: JSON.stringify(userData),
             });
 
             if (response.status === 201) {
-
-                const user = jwtToken.user.unique_name;
+                const user = auth.user.unique_name;
                 const path = "/" + user + "/" + userData.name;
                 navigate(path);
             } else if (response.status === 400 || response.status === 409) {

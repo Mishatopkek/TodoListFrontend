@@ -1,6 +1,6 @@
 ﻿import {CssBaseline, Typography} from "@mui/material";
-import {useCallback, useState} from "react";
-import {useDispatch} from "react-redux";
+import {useCallback, useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {boardActions} from "../store/boards.js";
 import Box from "@mui/material/Box";
 import {DragDropContext, Droppable} from "@hello-pangea/dnd";
@@ -8,12 +8,19 @@ import Column from "../components/UI/Column.jsx";
 import CreateColumn from "../components/UI/Column/CreateColumn.jsx";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add.js";
-import {useLoaderData} from "react-router-dom";
+import {useLoaderData, useParams} from "react-router-dom";
+import boardCreate from "../api/Boards/BoardCreate.js";
+import columnCreate from "../api/Boards/Columns/ColumnCreate.js";
+import boardInitialize from "../api/Boards/BoardByName.js";
 
 const Board = () => {
     const dispatch = useDispatch();
-    const board = useLoaderData();
+    const loadedData = useLoaderData();
+    const {project} = useParams();
     const [showCreateColumn, setShowCreateColumn] = useState(false);
+    let board = useSelector(state => state.board);
+    const auth = useSelector(state => state.auth);
+    board = useBoardInit(board, loadedData, dispatch, project, auth);
 
     const onIconButtonClick = useCallback((event) => {
         setShowCreateColumn(true);
@@ -32,13 +39,15 @@ const Board = () => {
             return;
         }
 
-        dispatch(boardActions.addColumn({
-            id: crypto.randomUUID(),
-            title: title,
-            cards: []
-        }));
+        columnCreate(title, board.id, auth.token).then(x => {
+            dispatch(boardActions.addColumn({
+                id: x.columnId,
+                title: title,
+                cards: []
+            }));
+        });
         setShowCreateColumn(false);
-    }, [dispatch]);
+    }, [dispatch, board.id, auth.token]);
 
     return (
         <>
@@ -98,4 +107,26 @@ const Board = () => {
     )
         ;
 };
+
+function useBoardInit(board, loadedData, dispatch, project, auth) {
+    if (!board) {
+        board = loadedData;
+    }
+    if (!board) {
+        board = {
+            id: null,
+            title: null,
+            columns: []
+        };
+    }
+
+    useEffect(() => {
+        if (loadedData) {
+            dispatch(boardActions.init(loadedData));
+        } else {
+            boardInitialize(project, auth.token).then(value => dispatch(boardActions.init(value)));
+        }
+    }, []);
+    return board;
+}
 export default Board;

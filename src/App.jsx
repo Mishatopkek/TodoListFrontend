@@ -50,7 +50,7 @@ const router = createBrowserRouter([
                                     if (isAuthenticated) {
                                         return boardInitialize(project, token);
                                     } else {
-                                        return redirect("/login");
+                                        return null;
                                     }
                                 },
                             }

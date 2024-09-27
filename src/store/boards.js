@@ -2,12 +2,11 @@
 
 const boardSlice = createSlice({
     name: "boards",
-    initialState: {
-        data: null,
-        loading: false,
-        error: null
-    },
+    initialState: null,
     reducers: {
+        init(state, action) {
+            return action.payload;
+        },
         addColumn(state, action) {
             const columns = state.columns;
             const column = action.payload;
