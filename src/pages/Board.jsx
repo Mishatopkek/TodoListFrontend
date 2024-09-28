@@ -9,20 +9,19 @@ import CreateColumn from "../components/UI/Column/CreateColumn.jsx";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add.js";
 import {useLoaderData, useParams} from "react-router-dom";
-import boardCreate from "../api/Boards/BoardCreate.js";
 import columnCreate from "../api/Boards/Columns/ColumnCreate.js";
 import boardInitialize from "../api/Boards/BoardByName.js";
 
 const Board = () => {
-    const dispatch = useDispatch();
-    const loadedData = useLoaderData();
-    const {project} = useParams();
-    const [showCreateColumn, setShowCreateColumn] = useState(false);
     let board = useSelector(state => state.board);
+    const loadedData = useLoaderData();
+    const dispatch = useDispatch();
+    const {project} = useParams();
     const auth = useSelector(state => state.auth);
     board = useBoardInit(board, loadedData, dispatch, project, auth);
+    const [showCreateColumn, setShowCreateColumn] = useState(false);
 
-    const onIconButtonClick = useCallback((event) => {
+    const onAddColumnButtonClick = useCallback((event) => {
         setShowCreateColumn(true);
     }, []);
 
@@ -95,7 +94,7 @@ const Board = () => {
                                         onCancel={onCancelColumn}
                                         onOutsideClick={onOutsideClick}
                                     />}
-                                {!showCreateColumn && <IconButton aria-label="add" onClick={onIconButtonClick}>
+                                {!showCreateColumn && <IconButton aria-label="add" onClick={onAddColumnButtonClick}>
                                     <AddIcon/>
                                 </IconButton>}
                             </Box>
