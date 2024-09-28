@@ -17,7 +17,7 @@ const boardSlice = createSlice({
             const columns = state.columns;
             const id = action.payload;
 
-            return columns.filter((column) => column.id !== id);
+            state.columns = columns.filter((column) => column.id !== id);
         },
         updateColumn(state, action) {
             const columns = state.columns;

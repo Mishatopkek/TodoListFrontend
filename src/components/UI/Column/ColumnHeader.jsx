@@ -5,14 +5,16 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz.js";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import {useRef, useState} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useTheme} from "@mui/material/styles";
 import InputWithButtons from "../InputWithButtons.jsx";
 import {boardActions} from "../../../store/boards.js";
+import columnDelete from "../../../api/Boards/Columns/ColumnDelete.js";
 
 const ColumnHeader = ({column}) => {
     const theme = useTheme();
     const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth);
     const inputRef = useRef(null);
     const [onColumnHeaderHover, setOnColumnHeaderHover] = useState(false);
     const [onColumnOption, setOnColumnOption] = useState(null);
@@ -29,7 +31,7 @@ const ColumnHeader = ({column}) => {
 
     const onDeleteColumn = () => {
         setOnColumnOption(null);
-        dispatch(boardActions.removeColumn(column.id));
+        columnDelete(column.id, auth.token).then(_ => dispatch(boardActions.removeColumn(column.id)));
     };
 
     const onOutsideClick = () => {
