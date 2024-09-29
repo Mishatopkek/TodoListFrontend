@@ -84,7 +84,7 @@ const Column = ({column, index}) => {
                                     {showCreateCard && <CreateCard onSubmit={onSubmitInput} onCancel={onOutsideClick}/>}
                                 </OutsideClickHandler>
                                 {!showCreateCard && <CreateIssueButton
-                                    shouldBeShown={onColumnHover || column.showAddCardByDefault}
+                                    shouldBeShown={onColumnHover || column.isAlwaysVisibleAddCardButton}
                                     clickHandler={onCreateButton}
                                 />}
                             </Box>

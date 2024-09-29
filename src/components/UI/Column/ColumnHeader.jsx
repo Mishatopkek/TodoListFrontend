@@ -10,6 +10,7 @@ import {useTheme} from "@mui/material/styles";
 import InputWithButtons from "../InputWithButtons.jsx";
 import {boardActions} from "../../../store/boards.js";
 import columnDelete from "../../../api/Boards/Columns/ColumnDelete.js";
+import columnPatch from "../../../api/Boards/Columns/ColumnPatch.js";
 
 const ColumnHeader = ({column}) => {
     const theme = useTheme();
@@ -53,6 +54,11 @@ const ColumnHeader = ({column}) => {
 
     const onSaveTitle = () => {
         const inputValue = inputRef.current.value;
+        columnPatch(column.id, column.title, auth.token).then(_ =>
+            dispatch(boardActions.updateColumn({
+                id: column.id,
+                title: inputValue
+            })));
         dispatch(boardActions.updateColumn({
             id: column.id,
             title: inputValue
