@@ -11,6 +11,7 @@ import AddIcon from "@mui/icons-material/Add.js";
 import {useLoaderData, useParams} from "react-router-dom";
 import columnCreate from "../api/Boards/Columns/ColumnCreate.js";
 import boardInitialize from "../api/Boards/BoardByName.js";
+import columnOrder from "../api/Boards/Columns/ColumnOrder.js";
 
 const Board = () => {
     let board = useSelector(state => state.board);
@@ -63,7 +64,7 @@ const Board = () => {
 
                 // Column reorder
                 if (dropResult.source.droppableId === dropResult.destination.droppableId && dropResult.source.droppableId === "board") {
-                    dispatch(boardActions.updateColumnPosition(dropResult));
+                    columnOrder(dropResult.draggableId, dropResult.destination.index, auth.token).then(_ => dispatch(boardActions.updateColumnPosition(dropResult)));
                 } else {
                     // Card move
                     dispatch(boardActions.updateCardPositionInColumn(dropResult));
