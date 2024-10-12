@@ -28,11 +28,11 @@ const boardSlice = createSlice({
         },
         updateColumnPosition(state, action) {
             const columns = state.columns;
-            const dropResult = action.payload;
+            const {columnId, position} = action.payload;
 
-            const sourceColumn = columns.find(x => x.id === dropResult.draggableId);
+            const sourceColumn = columns.find(x => x.id === columnId);
             columns.splice(columns.indexOf(sourceColumn), 1);
-            columns.splice(dropResult.destination.index, 0, sourceColumn);
+            columns.splice(position, 0, sourceColumn);
         },
         updateCardPositionInColumn(state, action) {
             const columns = state.columns;

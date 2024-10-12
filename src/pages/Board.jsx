@@ -62,9 +62,26 @@ const Board = () => {
             <DragDropContext onDragEnd={dropResult => {
                 if (dropResult.source === null || dropResult.destination === null) return columns;
 
+                const order = {
+                    columnId: dropResult.draggableId,
+                    position: dropResult.destination.index
+                };
                 // Column reorder
                 if (dropResult.source.droppableId === dropResult.destination.droppableId && dropResult.source.droppableId === "board") {
-                    columnOrder(dropResult.draggableId, dropResult.destination.index, auth.token).then(_ => dispatch(boardActions.updateColumnPosition(dropResult)));
+
+                    //Update position whatever result from backend
+                    dispatch(boardActions.updateColumnPosition(order));
+
+                    columnOrder(order.columnId, order.position, auth.token).then(isSuccess => {
+
+                        //If server was not succeeded to update position, we return to the previous state
+                        if (!isSuccess) {
+                            boardActions.updateColumnPosition({
+                                columnId: dropResult.draggableId,
+                                position: dropResult.source.index
+                            });
+                        }
+                    });
                 } else {
                     // Card move
                     dispatch(boardActions.updateCardPositionInColumn(dropResult));

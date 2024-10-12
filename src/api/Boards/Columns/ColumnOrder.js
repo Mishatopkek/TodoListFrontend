@@ -12,10 +12,7 @@ const columnOrder = async (columnId, position, jwtToken) => {
             position
         })
     });
-    if (response.ok) {
-        return;
-    }
-    return console.error(response);
+    return !!(response.ok);
 }
 
 export default columnOrder;
