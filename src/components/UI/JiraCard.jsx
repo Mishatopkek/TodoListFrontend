@@ -35,7 +35,7 @@ const JiraCard = ({card, index}) => {
             title: inputValue
         }));
         setOnEditTitle(false);
-    }, [dispatch, card.id]);
+    }, [dispatch, card]);
 
     const onChangeTitle = useCallback((event) => {
         if (event.key === 'Enter' || event.key === 'Escape') {

@@ -50,7 +50,7 @@ const CardModal = ({openModalState, onClose, card}) => {
                     label="Description"
                     multiline
                     fullWidth
-                    defaultValue={card.details.description}
+                    defaultValue={card.details?.description}
                     rows={4}
                     placeholder="Add a description..."
                     sx={{marginTop: "15px"}}

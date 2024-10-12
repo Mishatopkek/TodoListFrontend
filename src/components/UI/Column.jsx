@@ -3,31 +3,36 @@ import Box from "@mui/material/Box";
 import {Draggable, Droppable} from "@hello-pangea/dnd";
 import {useCallback, useState} from "react";
 import OutsideClickHandler from "../wrappers/OutsideClickHandler.jsx";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import CreateIssueButton from "./Column/CreateIssueButton.jsx";
 import CreateCard from "./Column/CreateCard.jsx";
 import ColumnHeader from "./Column/ColumnHeader.jsx";
 import {boardActions} from "../../store/boards.js";
+import cardCreate from "../../api/Boards/Columns/Cards/CardCreate.js";
 
 const Column = ({column, index}) => {
     const [onColumnHover, setOnColumnHover] = useState(false);
     const [showCreateCard, setShowCreateCard] = useState(false);
     const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth);
 
     const onSubmitInput = useCallback((title) => {
         if (title.length < 3) {
             return;
         }
 
-        const newCard = {
-            id: crypto.randomUUID(),
+        cardCreate(title, column.id, auth.token).then(
+            card => dispatch(boardActions.addCard({
             columnId: column.id,
-            title: title
-        };
-        dispatch(boardActions.addCard({columnId: column.id, card: newCard}));
+                card: {
+                    id: card.id,
+                    title
+                }
+            }))
+        );
 
         setShowCreateCard(false);
-    }, [dispatch, column.id]);
+    }, [dispatch, column.id, auth.token]);
 
     const onCreateButton = useCallback(() => {
         setShowCreateCard(true);
