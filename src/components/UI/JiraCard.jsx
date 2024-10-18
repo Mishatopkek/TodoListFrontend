@@ -5,12 +5,14 @@ import {useCallback, useRef, useState} from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from "@mui/material/IconButton";
 import InputWithButtons from "./InputWithButtons.jsx";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import CardModal from "./CardModal.jsx";
 import {boardActions} from "../../store/boards.js";
+import CardPatch from "../../api/Boards/Columns/Cards/CardPatch.js";
 
 const JiraCard = ({card, index}) => {
     const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth);
     const titleChangeRef = useRef(null);
     const [onCardHover, setOnCardHover] = useState(false);
     const [onEditTitle, setOnEditTitle] = useState(false);
@@ -29,13 +31,16 @@ const JiraCard = ({card, index}) => {
     }, []);
 
     const onSaveTitle = useCallback(() => {
-        const inputValue = titleChangeRef.current.value;
-        dispatch(boardActions.updateCard({
-            card: card,
-            title: inputValue
-        }));
+        const title = titleChangeRef.current.value;
+
+        CardPatch(title, card.id, auth.token).then(_ =>
+            dispatch(boardActions.updateCard({
+                card,
+                title
+            })));
+
         setOnEditTitle(false);
-    }, [dispatch, card]);
+    }, [dispatch, card, auth.token]);
 
     const onChangeTitle = useCallback((event) => {
         if (event.key === 'Enter' || event.key === 'Escape') {
