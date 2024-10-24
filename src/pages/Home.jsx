@@ -36,12 +36,6 @@ const Home = () => {
                     </Grid>
                 ))}
             </Grid>
-            <Box>
-                <ul>
-                    <li><Link to="misha">Test Misha page</Link></li>
-                </ul>
-            </Box>
-            <Typography>{JSON.stringify(auth)}</Typography>
         </>
     );
 };
