@@ -66,6 +66,13 @@ const boardSlice = createSlice({
             const cardSelected = findCardById(columns, card.id, card.columnId);
             cardSelected.title = title;
         },
+        setDetails(state, action) {
+            const {card, description} = action.payload;
+            const columns = state.columns;
+
+            const cardSelected = findCardById(columns, card.id, card.columnId);
+            cardSelected.details.description = description;
+        },
         updateDetails(state, action) {
             const {card, description} = action.payload;
             const columns = state.columns;

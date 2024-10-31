@@ -31,7 +31,7 @@ const CommentSection = ({card}) => {
         setNewComment('');
     };
 
-    const sortedComments = [...card.details.comments].sort((a, b) => {
+    const sortedComments = [...card.details?.comments || []].sort((a, b) => {
         return sortOrder === 'newest'
             ? new Date(b.date) - new Date(a.date)
             : new Date(a.date) - new Date(b.date);

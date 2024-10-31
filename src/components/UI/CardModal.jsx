@@ -3,9 +3,10 @@ import {Modal, TextField, Typography} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
 import CommentSection from "./CommentSection.jsx";
-import {useCallback, useRef} from "react";
-import {useDispatch} from "react-redux";
+import {useCallback, useEffect, useRef} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {boardActions} from "../../store/boards.js";
+import getCardDetailsById from "../../api/Boards/Columns/Cards/Details/GetCardDetailsById.js";
 
 const style = {
     position: 'absolute',
@@ -22,7 +23,12 @@ const style = {
 const CardModal = ({openModalState, onClose, card}) => {
     const inputRef = useRef(null);
     const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth);
 
+    useEffect(() => {
+        if (!openModalState) return;
+        getCardDetailsById(card.id, auth.token).then(details => boardActions.setDetails(details));
+    }, [openModalState]);
     const closeHandler = useCallback(() => {
         dispatch(boardActions.updateDetails({card, description: inputRef.current.value}));
         onClose();
