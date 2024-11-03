@@ -1,6 +1,6 @@
 ﻿import config from "../../../../../config.js";
 
-const cardPatch = async (title, cardId, jwtToken) => {
+const cardPatch = async (model, cardId, jwtToken) => {
     const response = await fetch(`${config.backendUrl}/api/Board/Column/Card`, {
         method: 'Patch',
         headers: {
@@ -8,8 +8,8 @@ const cardPatch = async (title, cardId, jwtToken) => {
             'Authorization': 'Bearer ' + jwtToken
         },
         body: JSON.stringify({
+            ...model,
             cardId,
-            title
         })
     });
     if (response.ok) {

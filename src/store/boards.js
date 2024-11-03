@@ -60,25 +60,27 @@ const boardSlice = createSlice({
             }
         },
         updateCard(state, action) {
-            const {card, title} = action.payload;
+            const {card, title, description} = action.payload;
             const columns = state.columns;
 
             const cardSelected = findCardById(columns, card.id, card.columnId);
-            cardSelected.title = title;
+            cardSelected.title ??= title;
+            cardSelected.description ??= description;
         },
         setDetails(state, action) {
-            const {card, description} = action.payload;
+            const {card, details} = action.payload;
+            const {description, comments, users} = details;
             const columns = state.columns;
 
             const cardSelected = findCardById(columns, card.id, card.columnId);
-            cardSelected.details.description = description;
+            cardSelected.description = description;
         },
         updateDetails(state, action) {
             const {card, description} = action.payload;
             const columns = state.columns;
 
             const cardSelected = findCardById(columns, card.id, card.columnId);
-            cardSelected.details.description = description;
+            cardSelected.description = description;
         },
         addComment(state, action) {
             const comment = action.payload;

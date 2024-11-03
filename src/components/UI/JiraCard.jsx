@@ -33,7 +33,7 @@ const JiraCard = ({card, index}) => {
     const onSaveTitle = useCallback(() => {
         const title = titleChangeRef.current.value;
 
-        CardPatch(title, card.id, auth.token).then(_ =>
+        CardPatch({title}, card.id, auth.token).then(_ =>
             dispatch(boardActions.updateCard({
                 card,
                 title

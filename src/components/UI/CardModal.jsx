@@ -3,10 +3,11 @@ import {Modal, TextField, Typography} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
 import CommentSection from "./CommentSection.jsx";
-import {useCallback, useEffect, useRef} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {boardActions} from "../../store/boards.js";
 import getCardDetailsById from "../../api/Boards/Columns/Cards/Details/GetCardDetailsById.js";
+import cardPatch from "../../api/Boards/Columns/Cards/CardPatch.js";
 
 const style = {
     position: 'absolute',
@@ -21,22 +22,36 @@ const style = {
 };
 
 const CardModal = ({openModalState, onClose, card}) => {
-    const inputRef = useRef(null);
+    const descriptionRef = useRef(null);
     const dispatch = useDispatch();
     const auth = useSelector(state => state.auth);
+    const [isFetchDetails, setIsFetchDetails] = useState(false);
 
     useEffect(() => {
         if (!openModalState) return;
-        getCardDetailsById(card.id, auth.token).then(details => boardActions.setDetails(details));
+        getCardDetailsById(card.id, auth.token)
+            .then(details => {
+                dispatch(boardActions.setDetails({card, details}))
+                setIsFetchDetails(true);
+            });
     }, [openModalState]);
     const closeHandler = useCallback(() => {
-        dispatch(boardActions.updateDetails({card, description: inputRef.current.value}));
+        const description = descriptionRef.current.value;
+        if (description === card?.description) {
+            setIsFetchDetails(false);
+            return;
+        }
+        cardPatch({description}, card.id, auth.token)
+            .then(_ => {
+                dispatch(boardActions.updateCard({card, description}))
+                setIsFetchDetails(false);
+            });
         onClose();
-    }, [onClose, dispatch, card]);
+    }, [onClose, dispatch, card, auth.token]);
 
     return (
         <Modal
-            open={openModalState}
+            open={openModalState && isFetchDetails}
             onClose={closeHandler}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
@@ -52,11 +67,11 @@ const CardModal = ({openModalState, onClose, card}) => {
                 </Box>
                 <TextField
                     id="outlined-multiline-static"
-                    inputRef={inputRef}
+                    inputRef={descriptionRef}
                     label="Description"
                     multiline
                     fullWidth
-                    defaultValue={card.details?.description}
+                    defaultValue={isFetchDetails && card.description}
                     rows={4}
                     placeholder="Add a description..."
                     sx={{marginTop: "15px"}}
