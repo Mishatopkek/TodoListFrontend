@@ -12,6 +12,7 @@ import {useLoaderData, useParams} from "react-router-dom";
 import columnCreate from "../api/Boards/Columns/ColumnCreate.js";
 import boardInitialize from "../api/Boards/BoardByName.js";
 import columnOrder from "../api/Boards/Columns/ColumnOrder.js";
+import cardOrder from "../api/Boards/Columns/Cards/Details/ColumnOrder.js";
 
 const Board = () => {
     let board = useSelector(state => state.board);
@@ -60,11 +61,12 @@ const Board = () => {
                 <Typography variant="h4" component="h1">{board.title}</Typography>
             </Box>
             <DragDropContext onDragEnd={dropResult => {
+                //TODO fix bug when you can't drop a column to the rightest part of the grid
                 if (dropResult.source === null || dropResult.destination === null) return columns;
 
                 const order = {
                     columnId: dropResult.draggableId,
-                    position: dropResult.destination.index
+                    position: dropResult.destination.index + 1 // +1 because the index starts with 0 
                 };
                 // Column reorder
                 if (dropResult.source.droppableId === dropResult.destination.droppableId && dropResult.source.droppableId === "board") {
@@ -77,14 +79,32 @@ const Board = () => {
                         //If server was not succeeded to update position, we return to the previous state
                         if (!isSuccess) {
                             boardActions.updateColumnPosition({
-                                columnId: dropResult.draggableId,
-                                position: dropResult.source.index
+                                columnId: order.columnId,
+                                position: order.position
                             });
                         }
                     });
                 } else {
                     // Card move
-                    dispatch(boardActions.updateCardPositionInColumn(dropResult));
+                    const order = {
+                        cardId: dropResult.draggableId,
+                        sourceColumnId: dropResult.source.droppableId,
+                        destinationColumnId: dropResult.destination.droppableId,
+                        position: dropResult.destination.index + 1,
+                    };
+                    dispatch(boardActions.updateCardPositionInColumn(order));
+
+                    cardOrder(order.cardId, order.destinationColumnId, order.position, auth.token)
+                        .then(isSuccess => {
+                            if (!isSuccess) {
+                                dispatch(boardActions.updateCardPositionInColumn({
+                                    cardId: order.cardId,
+                                    sourceColumnId: order.destinationColumnId,
+                                    destinationColumnId: order.sourceColumnId,
+                                    position: dropResult.source.index + 1,
+                                }));
+                            }
+                        });
                 }
             }}>
                 <Droppable

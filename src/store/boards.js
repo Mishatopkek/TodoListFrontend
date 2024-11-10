@@ -36,16 +36,16 @@ const boardSlice = createSlice({
         },
         updateCardPositionInColumn(state, action) {
             const columns = state.columns;
-            const dropResult = action.payload;
+            const {cardId, sourceColumnId, destinationColumnId, position} = action.payload;
 
             //Remove card from source column
-            const sourceColumn = columns.find(x => x.id === dropResult.source.droppableId);
-            const card = sourceColumn.cards.find(x => x.id === dropResult.draggableId);
-            sourceColumn.cards = sourceColumn.cards.filter(x => x.id !== dropResult.draggableId);
+            const sourceColumn = columns.find(x => x.id === sourceColumnId);
+            const card = sourceColumn.cards.find(x => x.id === cardId);
+            sourceColumn.cards = sourceColumn.cards.filter(x => x.id !== cardId);
 
             //Add card to destination column
-            const destinationColumn = columns.find(x => x.id === dropResult.destination.droppableId);
-            destinationColumn.cards.splice(dropResult.destination.index, 0, card);
+            const destinationColumn = columns.find(x => x.id === destinationColumnId);
+            destinationColumn.cards.splice(position, 0, card);
 
             //Actualize values
             card.columnId = destinationColumn.id;
