@@ -39,15 +39,15 @@ const CardModal = ({openModalState, onClose, card}) => {
         const description = descriptionRef.current.value;
         if (description === card?.description) {
             setIsFetchDetails(false);
-            return;
+        } else {
+            cardPatch({description}, card.id, auth.token)
+                .then(_ => {
+                    dispatch(boardActions.updateCard({card, description}))
+                    setIsFetchDetails(false);
+                });
         }
-        cardPatch({description}, card.id, auth.token)
-            .then(_ => {
-                dispatch(boardActions.updateCard({card, description}))
-                setIsFetchDetails(false);
-            });
         onClose();
-    }, [onClose, dispatch, card, auth.token]);
+    }, [onClose, dispatch, card, auth.token, card.id]);
 
     return (
         <Modal
