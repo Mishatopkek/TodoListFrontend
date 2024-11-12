@@ -75,19 +75,12 @@ const boardSlice = createSlice({
             const cardSelected = findCardById(columns, card.id, card.columnId);
             cardSelected.description = description;
         },
-        updateDetails(state, action) {
-            const {card, description} = action.payload;
-            const columns = state.columns;
-
-            const cardSelected = findCardById(columns, card.id, card.columnId);
-            cardSelected.description = description;
-        },
         addComment(state, action) {
             const comment = action.payload;
             const columns = state.columns;
 
             const card = findCardById(columns, comment.cardId);
-            card.details.comments.push(comment);
+            card.comments.push(comment);
         }
     }
 });

@@ -1,11 +1,13 @@
 ﻿import {useState} from "react";
 import Box from "@mui/material/Box";
 import {Avatar, Button, TextField, Typography} from "@mui/material";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {boardActions} from "../../store/boards.js";
+import commentCreate from "../../api/Boards/Columns/Cards/Comments/CommentCreate.js";
 
 const CommentSection = ({card}) => {
     const dispatch = useDispatch();
+    const auth = useSelector(state => state.auth);
     const [sortOrder, setSortOrder] = useState('newest');
     const [newComment, setNewComment] = useState('');
 
@@ -21,17 +23,22 @@ const CommentSection = ({card}) => {
         if (newComment.length < 3) {
             return;
         }
-        const comment = {
-            id: crypto.randomUUID(),
-            cardId: card.id,
-            text: newComment,
-            date: new Date().toISOString()
-        };
-        dispatch(boardActions.addComment(comment));
-        setNewComment('');
+
+        const commentText = newComment;
+        commentCreate(commentText, card.id, auth.token)
+            .then(commentResponse => {
+                const comment = {
+                    id: commentResponse.id,
+                    cardId: card.id,
+                    text: commentText,
+                    date: new Date().toISOString()
+                };
+                dispatch(boardActions.addComment(comment));
+                setNewComment('');
+            })
     };
 
-    const sortedComments = [...card.details?.comments || []].sort((a, b) => {
+    const sortedComments = [...card.comments || []].sort((a, b) => {
         return sortOrder === 'newest'
             ? new Date(b.date) - new Date(a.date)
             : new Date(a.date) - new Date(b.date);
