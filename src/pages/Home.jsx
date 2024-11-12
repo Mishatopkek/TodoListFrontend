@@ -30,13 +30,15 @@ const Home = () => {
             <Typography variant="h2">Your work</Typography>
             <Divider/>
             <Typography variant="h3">Recent projects</Typography>
-            <Grid container spacing={2}>
-                {projects.map(project => (
-                    <Grid item key={project.id}>
-                        <BoardCard title={project.title} onClick={() => handleCardClick(project)}/>
-                    </Grid>
-                ))}
-            </Grid>
+            {projects && projects.length > 0 &&
+                <Grid container spacing={2}>
+                    {projects.map(project => (
+                        <Grid item key={project.id}>
+                            <BoardCard title={project.title} onClick={() => handleCardClick(project)}/>
+                        </Grid>
+                    ))}
+                </Grid>
+            }
         </>
     );
 };
