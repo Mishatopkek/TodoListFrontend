@@ -1,5 +1,4 @@
-﻿import {Link, useNavigate} from "react-router-dom";
-import Box from "@mui/material/Box";
+﻿import {useNavigate} from "react-router-dom";
 import {Typography} from "@mui/material";
 import Divider from '@mui/material/Divider';
 import BoardCard from "../components/UI/Home/BoardCard.jsx";
@@ -17,8 +16,10 @@ const Home = () => {
             FetchBoardList(auth.token)
                 .then(x => x.json())
                 .then(x => setProjects(x));
+        } else {
+            setProjects([]);
         }
-    }, []);
+    }, [auth.isAuthenticated]);
     const handleCardClick = useCallback((project) => {
         const {author, name} = project;
         const url = `/${author}/${name}`;
