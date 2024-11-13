@@ -1,7 +1,7 @@
 ﻿import {useCallback, useRef} from "react";
 import InputWithButtons from "../InputWithButtons.jsx";
 
-const CreateColumn = ({onSubmit, onCancel, onOutsideClick}) => {
+const CreateColumnInput = ({onSubmit, onCancel, onOutsideClick}) => {
     const inputRef = useRef(null);
     const onInputChange = useCallback((event) => {
         if (event.key === 'Enter') {
@@ -44,4 +44,4 @@ const CreateColumn = ({onSubmit, onCancel, onOutsideClick}) => {
         }}
     />
 };
-export default CreateColumn;
+export default CreateColumnInput;
