@@ -45,7 +45,7 @@ const boardSlice = createSlice({
 
             //Add card to destination column
             const destinationColumn = columns.find(x => x.id === destinationColumnId);
-            destinationColumn.cards.splice(position, 0, card);
+            destinationColumn.cards.splice(position - 1, 0, card);
 
             //Actualize values
             card.columnId = destinationColumn.id;

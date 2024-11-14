@@ -16,7 +16,7 @@ const BoardSection = ({board}) => {
 
         const order = {
             columnId: dropResult.draggableId,
-            position: dropResult.destination.index + 1 // +1 because the index starts with 0 
+            position: dropResult.destination.index // +1 because the index starts with 0 
         };
 
         // Column reorder
