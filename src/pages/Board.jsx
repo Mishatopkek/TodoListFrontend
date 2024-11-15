@@ -10,7 +10,7 @@ import BoardSection from "../components/UI/Board/BoardSection.jsx";
 const Board = () => {
     const dispatch = useDispatch();
     const loadedData = useLoaderData();
-    const {project} = useParams();
+    const {project, username} = useParams();
     const token = useSelector(state => state.auth.token);
     let board = useSelector(state => state.board);
 
@@ -29,7 +29,7 @@ const Board = () => {
         if (loadedData) {
             dispatch(boardActions.init(loadedData));
         } else {
-            boardInitialize(project, token).then(value => dispatch(boardActions.init(value)));
+            boardInitialize(username, project, token).then(value => dispatch(boardActions.init(value)));
         }
     }, []);
 

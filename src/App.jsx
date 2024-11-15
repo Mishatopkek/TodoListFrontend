@@ -1,5 +1,5 @@
 import './App.css'
-import {createBrowserRouter, redirect, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Board from "./pages/Board.jsx";
 import Home from "./pages/Home.jsx";
 import UserDetail from "./pages/UserDetail.jsx";
@@ -45,10 +45,14 @@ const router = createBrowserRouter([
                                 index: true,
                                 element: <Board/>,
                                 loader: async ({params}) => {
-                                    const project = params.project;
+                                    const {project, username} = params;
                                     const {isAuthenticated, token} = store.getState().auth;
                                     if (isAuthenticated) {
-                                        return boardInitialize(project, token);
+                                        try {
+                                            return await boardInitialize(username, project, token);
+                                        } catch (e) {
+                                            return null;
+                                        }
                                     } else {
                                         return null;
                                     }
