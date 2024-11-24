@@ -6,13 +6,13 @@
 
 ## Table of Contents
 
-- [About](#about))
+- [About](#about)
 - [Screenshots and GIFs](#screenshots-and-gifs)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Setup Instructions](#setup-instructions)
 - [Project Status](#project-status)
-- [Contribution Guidelines](#contribution-guidelines
+- [Contribution Guidelines](#contribution-guidelines)
 - [License](#license)
 - [Contact](#contact)
 ---
