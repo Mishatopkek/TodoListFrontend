@@ -1,13 +1,15 @@
-﻿import {useState} from "react";
+﻿import * as React from "react";
+import {useState} from "react";
 import Box from "@mui/material/Box";
 import {Avatar, Button, TextField, Typography} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {boardActions} from "../../store/boards.js";
 import commentCreate from "../../api/Boards/Columns/Cards/Comments/CommentCreate.js";
+import TextColoredAvatar from "./TextColoredAvatar.jsx";
 
 const CommentSection = ({card}) => {
     const dispatch = useDispatch();
-    const auth = useSelector(state => state.auth);
+    const {token, user} = useSelector(state => state.auth);
     const [sortOrder, setSortOrder] = useState('newest');
     const [newComment, setNewComment] = useState('');
 
@@ -25,7 +27,7 @@ const CommentSection = ({card}) => {
         }
 
         const commentText = newComment;
-        commentCreate(commentText, card.id, auth.token)
+        commentCreate(commentText, card.id, token)
             .then(commentResponse => {
                 const comment = {
                     id: commentResponse.id,
@@ -52,7 +54,7 @@ const CommentSection = ({card}) => {
                 </Button>
             </Box>
             <Box sx={{display: 'flex', alignItems: 'center', marginTop: "10px"}}>
-                <Avatar sx={{marginRight: "10px"}}>U</Avatar>
+                <TextColoredAvatar sx={{marginRight: "10px"}}>{user.unique_name}</TextColoredAvatar>
                 <TextField
                     id="new-comment"
                     label="Add a comment..."

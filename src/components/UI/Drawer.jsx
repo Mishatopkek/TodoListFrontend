@@ -24,6 +24,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {authActions} from "../../store/auth.js";
 import BasicMenu from "../wrappers/BasicMenu.jsx";
 import MenuItem from "@mui/material/MenuItem";
+import TextColoredAvatar from "./TextColoredAvatar.jsx";
 
 const drawerWidth = 240;
 
@@ -96,15 +97,16 @@ export default function MiniDrawer() {
     const dispatch = useDispatch();
     const theme = useTheme();
     const navigate = useNavigate();
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    const [open, setOpen] = React.useState(false);
+    const {isAuthenticated, user} = useSelector((state) => state.auth);
+    const [openLeftDrawer, setOpenLeftDrawer] = React.useState(false);
+    //TODO add right drawler
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setOpenLeftDrawer(true);
     };
 
     const handleDrawerClose = () => {
-        setOpen(false);
+        setOpenLeftDrawer(false);
     };
 
     const handleCreateProject = useCallback(() => {
@@ -116,10 +118,16 @@ export default function MiniDrawer() {
         navigate("/");
     }, [dispatch, navigate]);
 
+    const handleAvatar = useCallback(() => {
+        if (user) {
+            navigate("/" + user.unique_name);
+        }
+    }, [navigate, user]);
+
     return (
         <Box sx={{flexGrow: 1}}>
             <CssBaseline/>
-            <AppBar position="fixed" open={open}>
+            <AppBar position="fixed" open={openLeftDrawer}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -128,7 +136,7 @@ export default function MiniDrawer() {
                         edge="start"
                         sx={{
                             marginRight: 5,
-                            ...(open && {display: 'none'}),
+                            ...(openLeftDrawer && {display: 'none'}),
                         }}
                     >
                         <MenuIcon/>
@@ -144,13 +152,21 @@ export default function MiniDrawer() {
 
                     <Box sx={{flexGrow: 1}}/>
 
-                    {!isAuthenticated && <Button color="inherit" component={Link} to="/login">Sign in</Button>}
-                    {!isAuthenticated && <Button color="inherit" component={Link} to="/signup">Sign up</Button>}
+                    {!isAuthenticated &&
+                        <>
+                            <Button color="inherit" component={Link} to="/login">Sign in</Button>
+                            <Button color="inherit" component={Link} to="/signup">Sign up</Button>
+                        </>
+                    }
                     {isAuthenticated &&
-                        <Button color="inherit" onClick={handleLogout}>Logout</Button>}
+                        <>
+                            <Button color="inherit" onClick={handleLogout}>Logout</Button>
+                            <TextColoredAvatar onClick={handleAvatar}>{user.unique_name}</TextColoredAvatar>
+                        </>
+                    }
                 </Toolbar>
             </AppBar>
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant="permanent" open={openLeftDrawer}>
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
@@ -163,20 +179,20 @@ export default function MiniDrawer() {
                             <ListItemButton
                                 sx={{
                                     minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
+                                    justifyContent: openLeftDrawer ? 'initial' : 'center',
                                     px: 2.5,
                                 }}
                             >
                                 <ListItemIcon
                                     sx={{
                                         minWidth: 0,
-                                        mr: open ? 3 : 'auto',
+                                        mr: openLeftDrawer ? 3 : 'auto',
                                         justifyContent: 'center',
                                     }}
                                 >
                                     {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
                                 </ListItemIcon>
-                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
+                                <ListItemText primary={text} sx={{opacity: openLeftDrawer ? 1 : 0}}/>
                             </ListItemButton>
                         </ListItem>
                     ))}
@@ -188,20 +204,20 @@ export default function MiniDrawer() {
                             <ListItemButton
                                 sx={{
                                     minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
+                                    justifyContent: openLeftDrawer ? 'initial' : 'center',
                                     px: 2.5,
                                 }}
                             >
                                 <ListItemIcon
                                     sx={{
                                         minWidth: 0,
-                                        mr: open ? 3 : 'auto',
+                                        mr: openLeftDrawer ? 3 : 'auto',
                                         justifyContent: 'center',
                                     }}
                                 >
                                     {index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}
                                 </ListItemIcon>
-                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
+                                <ListItemText primary={text} sx={{opacity: openLeftDrawer ? 1 : 0}}/>
                             </ListItemButton>
                         </ListItem>
                     ))}
