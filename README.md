@@ -1,20 +1,26 @@
 # TodoList Frontend
 
-![TodoList Banner](link_to_image)
+![TodoList Banner](https://github.com/user-attachments/assets/7654d738-fa7b-4fa0-af44-598ba8ac3c74)
 
 ---
 
 ## Table of Contents
 
-- [About](#about)
+- [About](#about))
+- [Screenshots and GIFs](#screenshots-and-gifs)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Setup Instructions](#setup-instructions)
 - [Project Status](#project-status)
-- [Contribution Guidelines](#contribution-guidelines)
-- [Screenshots and GIFs](#screenshots-and-gifs)
+- [Contribution Guidelines](#contribution-guidelines
 - [License](#license)
 - [Contact](#contact)
+---
+
+## About
+
+TodoList is an open-source and reverse-engineered version of Jira. This repository contains the frontend of the
+application, providing a user-friendly interface for managing tasks, columns, and boards efficiently.
 
 ---
 
@@ -33,14 +39,6 @@ CRUD of Columns and Cards:
 
 Add Descriptions and Comments:
 ![CardDetails](https://github.com/user-attachments/assets/1a3d86ad-76c4-4c59-810e-4e061a56dcd8)
-
-
----
-
-## About
-
-TodoList is an open-source and reverse-engineered version of Jira. This repository contains the frontend of the
-application, providing a user-friendly interface for managing tasks, columns, and boards efficiently.
 
 ---
 
